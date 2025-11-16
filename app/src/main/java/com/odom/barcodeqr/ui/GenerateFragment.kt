@@ -16,8 +16,10 @@ import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
+import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.Fragment
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
@@ -68,6 +70,21 @@ class GenerateFragment : Fragment() {
 
         binding.button.setOnClickListener {
             generateQRCodeWithCircularLogo()
+        }
+
+        binding.buttonSave.setOnClickListener {
+            val uri = saveBitmapToFile(requireContext(), binding.imageView.drawable.toBitmap(), "qr_code_example")
+            Toast.makeText(requireContext(), uri.toString(), Toast.LENGTH_SHORT).show()
+        }
+
+        binding.buttonShare.setOnClickListener {
+            //val qrBitmap = generateQRCode()
+         //   val dd = getBitmapFromVectorDrawable(requireContext(), binding.imageView.id)
+            val imageUri = saveBitmapToFile(requireContext(),  binding.imageView.drawable.toBitmap(), "qr_code_example")
+            if (imageUri != null) {
+                shareImage(requireContext(), imageUri)
+            }
+
         }
 
     }
