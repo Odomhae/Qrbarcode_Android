@@ -1,0 +1,81 @@
+package com.odom.barcodeqr.ui
+
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.core.app.ActivityCompat
+import androidx.fragment.app.Fragment
+import com.journeyapps.barcodescanner.BarcodeCallback
+import com.odom.barcodeqr.databinding.FragmentScanBinding
+
+class ScanFragment : Fragment() {
+
+    private var _binding: FragmentScanBinding? = null
+    // This property is only valid between onCreateView and
+    // onDestroyView.
+    private val binding get() = _binding!!
+
+    val PERMISSIONS: Array<String> = arrayOf(Manifest.permission.CAMERA)
+
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentScanBinding.inflate(inflater, container, false)
+        val root: View = binding.root
+
+        checkPermission()
+
+        return root
+    }
+
+    fun checkPermission() {
+        if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
+            binding.zxingBarcodeScanner.decodeContinuous(barcodeCallback)
+        } else {
+            ActivityCompat.requestPermissions(requireActivity(), PERMISSIONS, 200)
+        }
+    }
+
+    val barcodeCallback : BarcodeCallback = BarcodeCallback { result ->
+        binding.zxingBarcodeScanner.pause()
+
+        AlertDialog.Builder(requireContext())
+            .setTitle(result.result.toString())
+            .setMessage(result.text.toString() + " / " + result.barcodeFormat)
+            .setPositiveButton("저장") { dialog, _ ->
+                // 확인 버튼 클릭 시 실행할 코드
+                dialog.dismiss()
+            }
+            .setNegativeButton("취소") { dialog, _ ->
+                // 취소 버튼 클릭 시 실행할 코드
+                dialog.dismiss()
+            }
+
+            .show()
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        binding.zxingBarcodeScanner.resume()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        binding.zxingBarcodeScanner.pause()
+    }
+
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+}

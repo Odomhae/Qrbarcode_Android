@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">barcodeqr</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+
+    <string name="title_generate">QR 생성</string>
+    <string name="title_scan">바코드 스캔</string>
+    <string name="title_history">QR 기록</string>
+
+</resources>
