@@ -6,7 +6,7 @@ import androidx.room.Entity
 
 @Entity
 data class HistoryItem(
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
+    @PrimaryKey(autoGenerate = true) val id: Long = 0,
     // val qrtime : String,
     val qrString : String
 )

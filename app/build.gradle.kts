@@ -2,7 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
 //    alias(libs.plugins.kotlin.kapt)
-//    id(libs.plugins.kotlin.kapt.get().pluginId)
+    id(libs.plugins.kotlin.kapt.get().pluginId)
 //    alias(libs.plugins.compose.compiler) //apply false
 
 }
@@ -59,12 +59,12 @@ dependencies {
 //    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
 
     // Room
-    implementation("androidx.room:room-runtime:2.6.1")
- //   kapt("androidx.room:room-compiler:2.6.1")
-    implementation("androidx.room:room-ktx:2.6.1")
+    implementation("androidx.room:room-runtime:2.8.3")
+    kapt("androidx.room:room-compiler:2.8.3")
+    implementation("androidx.room:room-ktx:2.8.3")
 
 
-   // implementation("org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.9.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.7.0")
   //  implementation ("org.jetbrains.kotlin:kotlin-metadata-jvm:2.0.0")
 
 

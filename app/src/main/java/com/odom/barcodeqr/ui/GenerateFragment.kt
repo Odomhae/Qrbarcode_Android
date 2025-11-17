@@ -21,22 +21,39 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
 import com.google.zxing.common.BitMatrix
 import com.journeyapps.barcodescanner.BarcodeEncoder
 import com.odom.barcodeqr.R
 import com.odom.barcodeqr.databinding.FragmentGenerateBinding
+import com.odom.barcodeqr.history.HistoryViewModel
 import java.io.File
 import java.io.FileOutputStream
 
 class GenerateFragment : Fragment() {
+
+
+    private lateinit var viewModel: HistoryViewModel
+
 
     private var _binding: FragmentGenerateBinding? = null
 
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        // AndroidViewModel은 Application을 필요로 하므로 requireActivity().application을 전달
+        viewModel = ViewModelProvider(
+            this,
+            ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)
+        )[HistoryViewModel::class.java]
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -68,8 +85,11 @@ class GenerateFragment : Fragment() {
 
         binding.imageView.background = drawable
 
-        binding.button.setOnClickListener {
+        binding.buttonGenerate.setOnClickListener {
             generateQRCodeWithCircularLogo()
+
+            // 저장
+            viewModel.addHistory(binding.textView.text.toString())
         }
 
         binding.buttonSave.setOnClickListener {
