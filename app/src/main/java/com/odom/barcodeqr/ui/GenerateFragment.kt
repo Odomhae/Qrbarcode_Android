@@ -16,6 +16,7 @@ import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -32,6 +33,7 @@ import com.odom.barcodeqr.databinding.FragmentGenerateBinding
 import com.odom.barcodeqr.history.HistoryViewModel
 import java.io.File
 import java.io.FileOutputStream
+import yuku.ambilwarna.AmbilWarnaDialog
 
 class GenerateFragment : Fragment() {
 
@@ -72,11 +74,38 @@ class GenerateFragment : Fragment() {
         // val logoBitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_notifications_black_24dp)
         // bitmap인지 vector drawable인지 확인
 
+        var defaultColor = Color.RED
+
         val strokeWidth = 4 // in pixels
-        val strokeColor = Color.RED
+        var strokeColor = defaultColor
         val cornerRadius2 = 12f // optional
 
-        val drawable = GradientDrawable().apply {
+
+        binding.btPickColor.setOnClickListener {
+            val colorPicker = AmbilWarnaDialog(requireContext(), defaultColor,
+                object : AmbilWarnaDialog.OnAmbilWarnaListener {
+                    override fun onCancel(dialog: AmbilWarnaDialog) {
+                        // 취소 시 아무 동작 없음
+                    }
+
+                    override fun onOk(dialog: AmbilWarnaDialog, color: Int) {
+                        defaultColor = color
+                        binding.colorPreview.setBackgroundColor(color)
+
+                        val drawable = GradientDrawable().apply {
+                            shape = GradientDrawable.RECTANGLE
+                            setStroke(strokeWidth, defaultColor)
+                            cornerRadius = cornerRadius2
+                            setColor(Color.TRANSPARENT) // background color
+                        }
+
+                        binding.imageView.background = drawable
+                    }
+                })
+            colorPicker.show()
+        }
+
+        var drawable = GradientDrawable().apply {
             shape = GradientDrawable.RECTANGLE
             setStroke(strokeWidth, strokeColor)
             cornerRadius = cornerRadius2

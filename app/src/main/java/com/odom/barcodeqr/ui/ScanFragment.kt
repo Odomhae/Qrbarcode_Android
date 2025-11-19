@@ -21,6 +21,7 @@ class ScanFragment : Fragment() {
     private val binding get() = _binding!!
 
     val PERMISSIONS: Array<String> = arrayOf(Manifest.permission.CAMERA)
+    private var torchOn = false
 
 
     override fun onCreateView(
@@ -36,12 +37,28 @@ class ScanFragment : Fragment() {
         return root
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        binding.btFlash.setOnClickListener {
+            toggleFlash()
+            binding.btFlash.text = if (torchOn) "플래시 끄기" else "플래시 켜기"
+        }
+
+    }
+
     fun checkPermission() {
         if (ActivityCompat.checkSelfPermission(requireContext(), Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED) {
             binding.zxingBarcodeScanner.decodeContinuous(barcodeCallback)
         } else {
             ActivityCompat.requestPermissions(requireActivity(), PERMISSIONS, 200)
         }
+    }
+
+
+    private fun toggleFlash() {
+        torchOn = !torchOn
+        binding.zxingBarcodeScanner.setTorch(torchOn)
     }
 
     val barcodeCallback : BarcodeCallback = BarcodeCallback { result ->
@@ -71,6 +88,7 @@ class ScanFragment : Fragment() {
     override fun onPause() {
         super.onPause()
         binding.zxingBarcodeScanner.pause()
+        binding.zxingBarcodeScanner.setTorch(false)
     }
 
 

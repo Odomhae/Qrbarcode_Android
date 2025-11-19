@@ -44,19 +44,8 @@ android {
 dependencies {
 
     implementation("com.journeyapps:zxing-android-embedded:4.3.0")
-
-//    // Compose BOM 사용 권장
-//    implementation(platform("androidx.compose:compose-bom:2024.04.00"))
-//
-//    implementation("androidx.compose.ui:ui")
-//    implementation("androidx.compose.material3:material3")
-//    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
-
-//    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
-//    implementation("androidx.activity:activity-compose:1.11.0")
-//    implementation("androidx.compose.ui:ui:1.9.4")
-//    implementation("androidx.compose.material3:material3:1.4.0")
-//    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
+    // 색 선택
+    implementation ("com.github.yukuku:ambilwarna:2.0.1")
 
     // Room
     implementation("androidx.room:room-runtime:2.8.3")
@@ -65,7 +54,6 @@ dependencies {
 
 
     implementation("org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.7.0")
-  //  implementation ("org.jetbrains.kotlin:kotlin-metadata-jvm:2.0.0")
 
 
     implementation(libs.androidx.core.ktx)
