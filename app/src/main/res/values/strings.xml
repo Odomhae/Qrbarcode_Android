@@ -8,4 +8,7 @@
     <string name="title_scan">바코드 스캔</string>
     <string name="title_history">QR 기록</string>
 
+    <string name="torch_on">플래시 켜기</string>
+    <string name="torch_off">플래시 끄기</string>
+
 </resources>

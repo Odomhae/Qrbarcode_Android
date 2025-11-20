@@ -3,22 +3,22 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@+id/navigation_scan">
 
     <fragment
-        android:id="@+id/navigation_home"
-        android:name="com.odom.barcodeqr.ui.GenerateFragment"
-        android:label="@string/title_home"
-        tools:layout="@layout/fragment_generate" />
-
-    <fragment
-        android:id="@+id/navigation_dashboard"
+        android:id="@+id/navigation_scan"
         android:name="com.odom.barcodeqr.ui.ScanFragment"
         android:label="@string/title_dashboard"
         tools:layout="@layout/fragment_scan" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
+        android:id="@+id/navigation_generate"
+        android:name="com.odom.barcodeqr.ui.GenerateFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_generate" />
+
+    <fragment
+        android:id="@+id/navigation_history"
         android:name="com.odom.barcodeqr.ui.HistoryFragment"
         android:label="@string/title_notifications"
         tools:layout="@layout/fragment_history" />

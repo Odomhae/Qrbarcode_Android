@@ -11,6 +11,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.journeyapps.barcodescanner.BarcodeCallback
+import com.odom.barcodeqr.R
 import com.odom.barcodeqr.databinding.FragmentScanBinding
 
 class ScanFragment : Fragment() {
@@ -42,7 +43,8 @@ class ScanFragment : Fragment() {
 
         binding.btFlash.setOnClickListener {
             toggleFlash()
-            binding.btFlash.text = if (torchOn) "플래시 끄기" else "플래시 켜기"
+            binding.btFlash.background =
+                if (torchOn) resources.getDrawable(R.drawable.ic_flash) else resources.getDrawable(R.drawable.ic_flash_off)
         }
 
     }
@@ -74,6 +76,7 @@ class ScanFragment : Fragment() {
             .setNegativeButton("취소") { dialog, _ ->
                 // 취소 버튼 클릭 시 실행할 코드
                 dialog.dismiss()
+                binding.zxingBarcodeScanner.resume()
             }
 
             .show()

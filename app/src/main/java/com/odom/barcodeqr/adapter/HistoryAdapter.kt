@@ -52,7 +52,7 @@ class HistoryAdapter(
 
     private class ViewHolder(val binding: HistoryItemBinding) {
         fun bind(context: Context, historyItem: HistoryItem) {
-            binding.tvId.text = historyItem.id.toString()
+          //  binding.tvId.text = historyItem.id.toString()
             binding.tvString.text = historyItem.qrString
 
             binding.tvString.setOnLongClickListener {
