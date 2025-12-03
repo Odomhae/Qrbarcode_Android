@@ -7,4 +7,17 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    
+    
+    <color name="pumkin">#d48333</color>
+    <color name="brown">#d0a36f</color>
+    <color name="choco">#8f4f29</color>
+    <color name="dark_choco">#4f3723</color>
+
+    <color name="purple1">#939afe</color>
+    <color name="purple2">#6a6ecb</color>
+    <color name="hermes">#e87f5b</color>
+    <color name="hermes2">#F37021</color>
+
+    
 </resources>
