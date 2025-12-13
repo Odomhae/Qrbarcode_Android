@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.camera.core.CameraSelector
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.journeyapps.barcodescanner.BarcodeCallback
@@ -23,6 +24,7 @@ class ScanFragment : Fragment() {
 
     val PERMISSIONS: Array<String> = arrayOf(Manifest.permission.CAMERA)
     private var torchOn = false
+    private var cameraSelector: CameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
 
     override fun onCreateView(
@@ -45,6 +47,22 @@ class ScanFragment : Fragment() {
             toggleFlash()
             binding.btFlash.background =
                 if (torchOn) resources.getDrawable(R.drawable.ic_flash) else resources.getDrawable(R.drawable.ic_flash_off)
+        }
+
+        binding.btCameraSwitch.setOnClickListener {
+            binding.zxingBarcodeScanner.pause() // 기존 카메라 정지
+
+            // 전면 <-> 후면 카메라 토글
+            if (cameraSelector == CameraSelector.DEFAULT_BACK_CAMERA) {
+                binding.zxingBarcodeScanner.cameraSettings.requestedCameraId = 1 // Set to front camera
+                cameraSelector = CameraSelector.DEFAULT_FRONT_CAMERA
+                binding.btFlash.background = resources.getDrawable(R.drawable.ic_flash_off)
+            } else {
+                binding.zxingBarcodeScanner.cameraSettings.requestedCameraId = 0
+                cameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
+            }
+
+            binding.zxingBarcodeScanner.resume() // 새 카메라 시작
         }
 
     }

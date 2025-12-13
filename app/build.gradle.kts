@@ -55,6 +55,9 @@ dependencies {
 
     implementation("org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.7.0")
 
+    // 카메라 전면 후면 토글
+    implementation(libs.androidx.camera.core)
+
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

@@ -17,6 +17,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.RadioButton
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -74,61 +75,101 @@ class GenerateFragment : Fragment() {
         // val logoBitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_notifications_black_24dp)
         // bitmap인지 vector drawable인지 확인
 
-        var defaultColor = Color.RED
+//        var defaultColor = Color.RED
+//
+//        val strokeWidth = 4 // in pixels
+//        var strokeColor = defaultColor
+//        val cornerRadius2 = 12f // optional
+//
+//
+//        binding.btPickColor.setOnClickListener {
+//            val colorPicker = AmbilWarnaDialog(requireContext(), defaultColor,
+//                object : AmbilWarnaDialog.OnAmbilWarnaListener {
+//                    override fun onCancel(dialog: AmbilWarnaDialog) {
+//                        // 취소 시 아무 동작 없음
+//                    }
+//
+//                    override fun onOk(dialog: AmbilWarnaDialog, color: Int) {
+//                        defaultColor = color
+//                        binding.colorPreview.setBackgroundColor(color)
+//
+//                        val drawable = GradientDrawable().apply {
+//                            shape = GradientDrawable.RECTANGLE
+//                            setStroke(strokeWidth, defaultColor)
+//                            cornerRadius = cornerRadius2
+//                            setColor(Color.TRANSPARENT) // background color
+//                        }
+//
+//                        binding.imageView.background = drawable
+//                    }
+//                })
+//            colorPicker.show()
+//        }
+//
+//        var drawable = GradientDrawable().apply {
+//            shape = GradientDrawable.RECTANGLE
+//            setStroke(strokeWidth, strokeColor)
+//            cornerRadius = cornerRadius2
+//            setColor(Color.TRANSPARENT) // background color
+//        }
+//
+//        binding.imageView.background = drawable
+//
+//        binding.buttonGenerate.setOnClickListener {
+//            generateQRCodeWithCircularLogo()
+//
+//            // 저장
+//            viewModel.addHistory(binding.textView.text.toString())
+//        }
+//
+//        binding.buttonSave.setOnClickListener {
+//            val uri = saveBitmapToFile(requireContext(), binding.imageView.drawable.toBitmap(), "qr_code_example")
+//            Toast.makeText(requireContext(), uri.toString(), Toast.LENGTH_SHORT).show()
+//        }
+//
 
-        val strokeWidth = 4 // in pixels
-        var strokeColor = defaultColor
-        val cornerRadius2 = 12f // optional
-
-
-        binding.btPickColor.setOnClickListener {
-            val colorPicker = AmbilWarnaDialog(requireContext(), defaultColor,
-                object : AmbilWarnaDialog.OnAmbilWarnaListener {
-                    override fun onCancel(dialog: AmbilWarnaDialog) {
-                        // 취소 시 아무 동작 없음
-                    }
-
-                    override fun onOk(dialog: AmbilWarnaDialog, color: Int) {
-                        defaultColor = color
-                        binding.colorPreview.setBackgroundColor(color)
-
-                        val drawable = GradientDrawable().apply {
-                            shape = GradientDrawable.RECTANGLE
-                            setStroke(strokeWidth, defaultColor)
-                            cornerRadius = cornerRadius2
-                            setColor(Color.TRANSPARENT) // background color
-                        }
-
-                        binding.imageView.background = drawable
-                    }
-                })
-            colorPicker.show()
-        }
-
-        var drawable = GradientDrawable().apply {
-            shape = GradientDrawable.RECTANGLE
-            setStroke(strokeWidth, strokeColor)
-            cornerRadius = cornerRadius2
-            setColor(Color.TRANSPARENT) // background color
-        }
-
-        binding.imageView.background = drawable
 
         binding.buttonGenerate.setOnClickListener {
-            generateQRCodeWithCircularLogo()
+            val selectedId = binding.radioGroup.checkedRadioButtonId
+            val selectedRadio = view.findViewById<RadioButton>(selectedId)
+            val selected = selectedRadio.text.toString()
+            var input = binding.editText.text.toString()
+
+            when (selected) {
+                "URL" -> {
+                    if (!input.startsWith("http://") && !input.startsWith("https://")) {
+                        input = "https://$input"
+                        binding.editText.setText(input) // 사용자 입력창도 바꿔줌
+                    }
+                }
+                "이메일" -> {
+                    input = "mailto:$input"
+                    binding.editText.setText(input)
+                }
+                "연락처" -> {
+                    input = """
+                BEGIN:VCARD
+                VERSION:3.0
+                N:$input
+                TEL:01012345678
+                EMAIL:$input@example.com
+                END:VCARD
+            """.trimIndent()
+                    binding.editText.setText(input)
+                }
+            }
+
+            val qrBitmap = generateQRCode(input)
+            binding.imageView.setImageBitmap(qrBitmap)
 
             // 저장
-            viewModel.addHistory(binding.textView.text.toString())
+            viewModel.addHistory(input.toString())
+
+            binding.buttonShare.visibility = View.VISIBLE
         }
 
-        binding.buttonSave.setOnClickListener {
-            val uri = saveBitmapToFile(requireContext(), binding.imageView.drawable.toBitmap(), "qr_code_example")
-            Toast.makeText(requireContext(), uri.toString(), Toast.LENGTH_SHORT).show()
-        }
-
+        // 공유하기
         binding.buttonShare.setOnClickListener {
-            //val qrBitmap = generateQRCode()
-         //   val dd = getBitmapFromVectorDrawable(requireContext(), binding.imageView.id)
             val imageUri = saveBitmapToFile(requireContext(),  binding.imageView.drawable.toBitmap(), "qr_code_example")
             if (imageUri != null) {
                 shareImage(requireContext(), imageUri)
@@ -138,12 +179,13 @@ class GenerateFragment : Fragment() {
 
     }
 
-    fun generateQRCodeWithCircularLogo() {
-        val logoBitmap = getBitmapFromVectorDrawable(requireContext(), R.drawable.ic_launcher_foreground)
-        val qrBitmap = generateQRCodeWithCircularLogo(binding.textView.text.toString(), 512, logoBitmap)
-        binding.imageView.setImageBitmap(qrBitmap)
+//    fun generateQRCodeWithCircularLogo() {
+//        val logoBitmap = getBitmapFromVectorDrawable(requireContext(), R.drawable.ic_launcher_foreground)
+//        val qrBitmap = generateQRCodeWithCircularLogo(binding.textView.text.toString(), 512, logoBitmap)
+//        binding.imageView.setImageBitmap(qrBitmap)
+//
+//    }
 
-    }
 
     fun generateQRCode(content: String, size: Int = 512): Bitmap? {
         return try {
