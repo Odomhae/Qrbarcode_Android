@@ -19,6 +19,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.RadioButton
 import android.widget.Toast
+import androidx.navigation.fragment.navArgs
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.graphics.drawable.toBitmap
@@ -38,7 +39,7 @@ import yuku.ambilwarna.AmbilWarnaDialog
 
 class GenerateFragment : Fragment() {
 
-
+    private val args: GenerateFragmentArgs by navArgs()
     private lateinit var viewModel: HistoryViewModel
 
 
@@ -48,8 +49,23 @@ class GenerateFragment : Fragment() {
     // onDestroyView.
     private val binding get() = _binding!!
 
+    companion object {
+        fun newInstance(selectedType : String) : GenerateFragment {
+            val fragment = GenerateFragment()
+            val bundle = Bundle()
+            bundle.putString("selectedType", selectedType)
+            fragment.arguments = bundle
+
+            return fragment
+        }
+
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val selectedType = args.selectedType
+        Toast.makeText(requireContext(), selectedType , Toast.LENGTH_SHORT).show()
 
         // AndroidViewModel은 Application을 필요로 하므로 requireActivity().application을 전달
         viewModel = ViewModelProvider(
