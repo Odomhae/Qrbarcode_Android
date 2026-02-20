@@ -12,14 +12,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import androidx.navigation.fragment.findNavController
 import com.odom.barcodeqr.R
+import com.odom.barcodeqr.databinding.FragmentGenerateBinding
+import com.odom.barcodeqr.databinding.FragmentRadioGroupBinding
 
 class RadioGroupFragment : Fragment() {
 
-    private var listener: OnRadioSelectedListener? = null
-
-    interface OnRadioSelectedListener {
-        fun onRadioSelected(type: String)
-    }
+    private var _binding: FragmentRadioGroupBinding? = null
+    private val binding get() = _binding!!
 
     override fun onCreateView(
         inflater: LayoutInflater,

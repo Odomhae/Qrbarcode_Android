@@ -19,6 +19,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.RadioButton
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.navigation.fragment.navArgs
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -26,6 +27,7 @@ import androidx.core.graphics.drawable.toBitmap
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
 import com.google.zxing.common.BitMatrix
@@ -191,6 +193,14 @@ class GenerateFragment : Fragment() {
                 shareImage(requireContext(), imageUri)
             }
 
+        }
+
+        binding.buttonBack.setOnClickListener {
+            findNavController().navigate(R.id.navigation_radio)
+        }
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            findNavController().navigate(R.id.navigation_radio)
         }
 
     }

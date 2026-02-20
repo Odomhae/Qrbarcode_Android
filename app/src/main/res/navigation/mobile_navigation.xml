@@ -18,8 +18,6 @@
         tools:layout="@layout/fragment_generate" >
         <action android:id="@+id/action_radioGroupFragment_to_generateFragment"
             app:destination="@id/navigation_generate" />
-
-
     </fragment>
 
     <fragment
@@ -29,10 +27,11 @@
 
         <argument android:name="selectedType"
             app:argType="string" />
-
+        
+        <action android:id="@+id/action_generateFragment_to_radioFragment"
+            app:destination="@id/navigation_radio" />
 
     </fragment>
-
 
     <fragment
         android:id="@+id/navigation_history"
