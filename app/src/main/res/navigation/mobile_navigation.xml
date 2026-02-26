@@ -12,24 +12,12 @@
         tools:layout="@layout/fragment_scan" />
 
     <fragment
-        android:id="@+id/navigation_radio"
-        android:name="com.odom.barcodeqr.ui.RadioGroupFragment"
-        android:label="@string/title_home"
-        tools:layout="@layout/fragment_generate" >
-        <action android:id="@+id/action_radioGroupFragment_to_generateFragment"
-            app:destination="@id/navigation_generate" />
-    </fragment>
-
-    <fragment
         android:id="@+id/navigation_generate"
         android:name="com.odom.barcodeqr.ui.GenerateFragment"
         android:label="generate">
 
         <argument android:name="selectedType"
             app:argType="string" />
-        
-        <action android:id="@+id/action_generateFragment_to_radioFragment"
-            app:destination="@id/navigation_radio" />
 
     </fragment>
 

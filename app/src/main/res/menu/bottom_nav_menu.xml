@@ -8,7 +8,7 @@
         android:title="@string/title_scan" />
 
     <item
-        android:id="@+id/navigation_radio"
+        android:id="@+id/navigation_generate"
         android:icon="@drawable/ic_edit"
         android:title="@string/title_generate" />
 

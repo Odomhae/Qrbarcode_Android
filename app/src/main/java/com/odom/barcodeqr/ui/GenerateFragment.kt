@@ -4,11 +4,14 @@ import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.Matrix
 import android.graphics.Paint
 import android.graphics.Path
 import android.graphics.drawable.GradientDrawable
+import android.media.ExifInterface
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
@@ -16,11 +19,9 @@ import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.RadioButton
 import android.widget.Toast
 import androidx.activity.addCallback
-import androidx.navigation.fragment.navArgs
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.graphics.drawable.toBitmap
@@ -28,6 +29,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
 import com.google.zxing.common.BitMatrix
@@ -37,19 +39,57 @@ import com.odom.barcodeqr.databinding.FragmentGenerateBinding
 import com.odom.barcodeqr.history.HistoryViewModel
 import java.io.File
 import java.io.FileOutputStream
+import java.text.SimpleDateFormat
+import java.util.*
 import yuku.ambilwarna.AmbilWarnaDialog
 
 class GenerateFragment : Fragment() {
 
-    private val args: GenerateFragmentArgs by navArgs()
+   // private val args: GenerateFragmentArgs by navArgs()
     private lateinit var viewModel: HistoryViewModel
 
-
     private var _binding: FragmentGenerateBinding? = null
-
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
+
+    // Customization variables
+    private var foregroundColor = Color.BLACK
+    private var backgroundColor = Color.WHITE
+    private var borderColor = Color.BLACK
+    private var selectedLogoBitmap: Bitmap? = null
+    private var addImageToQR = false
+
+    // Activity result launcher for image selection
+    private val imagePickerLauncher = registerForActivityResult(
+        ActivityResultContracts.GetContent()
+    ) { uri: Uri? ->
+        uri?.let {
+            try {
+                val bitmap = BitmapFactory.decodeStream(requireContext().contentResolver.openInputStream(it))
+                selectedLogoBitmap = correctImageOrientation(bitmap, it)
+                binding.selectedImagePreview.setImageBitmap(selectedLogoBitmap)
+                binding.selectedImagePreview.visibility = View.VISIBLE
+            } catch (e: Exception) {
+                Toast.makeText(requireContext(), "이미지를 불러올 수 없습니다", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+    // Activity result launcher for camera
+    private lateinit var photoUri: Uri
+    private val cameraLauncher = registerForActivityResult(
+        ActivityResultContracts.TakePicture()
+    ) { success ->
+        if (success) {
+            try {
+                val bitmap = BitmapFactory.decodeStream(requireContext().contentResolver.openInputStream(photoUri))
+                selectedLogoBitmap = correctImageOrientation(bitmap, photoUri)
+                binding.selectedImagePreview.setImageBitmap(selectedLogoBitmap)
+                binding.selectedImagePreview.visibility = View.VISIBLE
+            } catch (e: Exception) {
+                Toast.makeText(requireContext(), "사진을 불러올 수 없습니다", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
 
     companion object {
         fun newInstance(selectedType : String) : GenerateFragment {
@@ -66,8 +106,8 @@ class GenerateFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val selectedType = args.selectedType
-        Toast.makeText(requireContext(), selectedType , Toast.LENGTH_SHORT).show()
+      //  val selectedType = args.selectedType
+      //  Toast.makeText(requireContext(), selectedType , Toast.LENGTH_SHORT).show()
 
         // AndroidViewModel은 Application을 필요로 하므로 requireActivity().application을 전달
         viewModel = ViewModelProvider(
@@ -88,102 +128,10 @@ class GenerateFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        binding.imageView.setImageBitmap(generateQRCode("Hello World"))
-
-        // val logoBitmap = BitmapFactory.decodeResource(resources, R.drawable.ic_notifications_black_24dp)
-        // bitmap인지 vector drawable인지 확인
-
-//        var defaultColor = Color.RED
-//
-//        val strokeWidth = 4 // in pixels
-//        var strokeColor = defaultColor
-//        val cornerRadius2 = 12f // optional
-//
-//
-//        binding.btPickColor.setOnClickListener {
-//            val colorPicker = AmbilWarnaDialog(requireContext(), defaultColor,
-//                object : AmbilWarnaDialog.OnAmbilWarnaListener {
-//                    override fun onCancel(dialog: AmbilWarnaDialog) {
-//                        // 취소 시 아무 동작 없음
-//                    }
-//
-//                    override fun onOk(dialog: AmbilWarnaDialog, color: Int) {
-//                        defaultColor = color
-//                        binding.colorPreview.setBackgroundColor(color)
-//
-//                        val drawable = GradientDrawable().apply {
-//                            shape = GradientDrawable.RECTANGLE
-//                            setStroke(strokeWidth, defaultColor)
-//                            cornerRadius = cornerRadius2
-//                            setColor(Color.TRANSPARENT) // background color
-//                        }
-//
-//                        binding.imageView.background = drawable
-//                    }
-//                })
-//            colorPicker.show()
-//        }
-//
-//        var drawable = GradientDrawable().apply {
-//            shape = GradientDrawable.RECTANGLE
-//            setStroke(strokeWidth, strokeColor)
-//            cornerRadius = cornerRadius2
-//            setColor(Color.TRANSPARENT) // background color
-//        }
-//
-//        binding.imageView.background = drawable
-//
-//        binding.buttonGenerate.setOnClickListener {
-//            generateQRCodeWithCircularLogo()
-//
-//            // 저장
-//            viewModel.addHistory(binding.textView.text.toString())
-//        }
-//
-//        binding.buttonSave.setOnClickListener {
-//            val uri = saveBitmapToFile(requireContext(), binding.imageView.drawable.toBitmap(), "qr_code_example")
-//            Toast.makeText(requireContext(), uri.toString(), Toast.LENGTH_SHORT).show()
-//        }
-//
-
+        setupCustomizationPanel()
 
         binding.buttonGenerate.setOnClickListener {
-            val selectedId = binding.radioGroup.checkedRadioButtonId
-            val selectedRadio = view.findViewById<RadioButton>(selectedId)
-            val selected = selectedRadio.text.toString()
-            var input = binding.editText.text.toString()
-
-            when (selected) {
-                "URL" -> {
-                    if (!input.startsWith("http://") && !input.startsWith("https://")) {
-                        input = "https://$input"
-                        binding.editText.setText(input) // 사용자 입력창도 바꿔줌
-                    }
-                }
-                "이메일" -> {
-                    input = "mailto:$input"
-                    binding.editText.setText(input)
-                }
-                "연락처" -> {
-                    input = """
-                BEGIN:VCARD
-                VERSION:3.0
-                N:$input
-                TEL:01012345678
-                EMAIL:$input@example.com
-                END:VCARD
-            """.trimIndent()
-                    binding.editText.setText(input)
-                }
-            }
-
-            val qrBitmap = generateQRCode(input)
-            binding.imageView.setImageBitmap(qrBitmap)
-
-            // 저장
-            viewModel.addHistory(input.toString())
-
-            binding.buttonShare.visibility = View.VISIBLE
+            generateCustomizedQRCode()
         }
 
         // 공유하기
@@ -192,26 +140,82 @@ class GenerateFragment : Fragment() {
             if (imageUri != null) {
                 shareImage(requireContext(), imageUri)
             }
-
-        }
-
-        binding.buttonBack.setOnClickListener {
-            findNavController().navigate(R.id.navigation_radio)
         }
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-            findNavController().navigate(R.id.navigation_radio)
+           // findNavController().navigate(R.id.navigation_radio)
         }
-
     }
 
-//    fun generateQRCodeWithCircularLogo() {
-//        val logoBitmap = getBitmapFromVectorDrawable(requireContext(), R.drawable.ic_launcher_foreground)
-//        val qrBitmap = generateQRCodeWithCircularLogo(binding.textView.text.toString(), 512, logoBitmap)
-//        binding.imageView.setImageBitmap(qrBitmap)
-//
-//    }
+    private fun setupCustomizationPanel() {
+        // Color pickers setup
+        binding.btnPickForegroundColor.setOnClickListener {
+            showColorPicker(foregroundColor) { color ->
+                foregroundColor = color
+                binding.foregroundColorPreview.setBackgroundColor(color)
+            }
+        }
 
+        binding.btnPickBackgroundColor.setOnClickListener {
+            showColorPicker(backgroundColor) { color ->
+                backgroundColor = color
+                binding.backgroundColorPreview.setBackgroundColor(color)
+            }
+        }
+
+        binding.btnPickBorderColor.setOnClickListener {
+            showColorPicker(borderColor) { color ->
+                borderColor = color
+                binding.borderColorPreview.setBackgroundColor(color)
+            }
+        }
+
+        // Image options setup
+        binding.checkAddImage.setOnCheckedChangeListener { _, isChecked ->
+            addImageToQR = isChecked
+            binding.btnSelectImage.isEnabled = isChecked
+            binding.btnTakePhoto.isEnabled = isChecked
+            if (!isChecked) {
+                binding.selectedImagePreview.visibility = View.GONE
+                selectedLogoBitmap = null
+            }
+        }
+
+        binding.btnSelectImage.setOnClickListener {
+            imagePickerLauncher.launch("image/*")
+        }
+
+        binding.btnTakePhoto.setOnClickListener {
+            dispatchTakePictureIntent()
+        }
+    }
+
+    private fun showColorPicker(initialColor: Int, onColorSelected: (Int) -> Unit) {
+        val colorPicker = AmbilWarnaDialog(requireContext(), initialColor,
+            object : AmbilWarnaDialog.OnAmbilWarnaListener {
+                override fun onCancel(dialog: AmbilWarnaDialog) {
+                    // 취소 시 아무 동작 없음
+                }
+
+                override fun onOk(dialog: AmbilWarnaDialog, color: Int) {
+                    onColorSelected(color)
+                }
+            })
+        colorPicker.show()
+    }
+
+    private fun generateCustomizedQRCode() {
+        var input = binding.editText.text.toString()
+        val qrBitmap = if (addImageToQR && selectedLogoBitmap != null) {
+            generateQRCodeWithCircularLogoAndBorder(input, 512, selectedLogoBitmap!!)
+        } else {
+            generateColoredQRCodeWithBorder(input, 512, foregroundColor, backgroundColor, borderColor)
+        }
+
+        binding.imageView.setImageBitmap(qrBitmap)
+        viewModel.addHistory(input.toString())
+        binding.buttonShare.visibility = View.VISIBLE
+    }
 
     fun generateQRCode(content: String, size: Int = 512): Bitmap? {
         return try {
@@ -229,16 +233,7 @@ class GenerateFragment : Fragment() {
         }
     }
 
-    /*
-    val qrBitmap = generateColoredQRCode(
-        content = "https://example.com",
-        size = 512,
-        fgColor = Color.BLUE,     // 전경색 (QR 블록)
-        bgColor = Color.YELLOW    // 배경색
-    )
-
-    */
-    fun generateColoredQRCode(content: String, size: Int = 512, fgColor: Int, bgColor: Int): Bitmap? {
+    fun generateColoredQRCodeWithBorder(content: String, size: Int = 512, fgColor: Int, bgColor: Int, borderColor: Int): Bitmap? {
         return try {
             val bitMatrix = MultiFormatWriter().encode(
                 content,
@@ -255,6 +250,14 @@ class GenerateFragment : Fragment() {
                     bitmap.setPixel(x, y, color)
                 }
             }
+
+            // Add border
+            val canvas = Canvas(bitmap)
+            val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+            paint.style = Paint.Style.STROKE
+            paint.color = borderColor
+            paint.strokeWidth = 4f // Border width
+            canvas.drawRect(2f, 2f, (size - 2).toFloat(), (size - 2).toFloat(), paint)
 
             bitmap
         } catch (e: Exception) {
@@ -458,6 +461,115 @@ if (imageUri != null) {
         return imageUri
     }
 
+    // Function to correct image orientation
+    private fun correctImageOrientation(bitmap: Bitmap, uri: Uri): Bitmap {
+        return try {
+            val inputStream = requireContext().contentResolver.openInputStream(uri)
+            val exif = inputStream?.use { ExifInterface(it) }
+            
+            val orientation = exif?.getAttributeInt(
+                ExifInterface.TAG_ORIENTATION,
+                ExifInterface.ORIENTATION_NORMAL
+            ) ?: ExifInterface.ORIENTATION_NORMAL
+
+            val matrix = Matrix()
+            
+            when (orientation) {
+                ExifInterface.ORIENTATION_ROTATE_90 -> matrix.postRotate(90f)
+                ExifInterface.ORIENTATION_ROTATE_180 -> matrix.postRotate(180f)
+                ExifInterface.ORIENTATION_ROTATE_270 -> matrix.postRotate(270f)
+                ExifInterface.ORIENTATION_FLIP_HORIZONTAL -> matrix.postScale(-1f, 1f)
+                ExifInterface.ORIENTATION_FLIP_VERTICAL -> matrix.postScale(1f, -1f)
+                ExifInterface.ORIENTATION_TRANSPOSE -> {
+                    matrix.postScale(-1f, 1f)
+                    matrix.postRotate(90f)
+                }
+                ExifInterface.ORIENTATION_TRANSVERSE -> {
+                    matrix.postScale(-1f, 1f)
+                    matrix.postRotate(270f)
+                }
+                else -> {
+                    // No rotation needed
+                    return bitmap
+                }
+            }
+
+            Bitmap.createBitmap(bitmap, 0, 0, bitmap.width, bitmap.height, matrix, true)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            bitmap // Return original bitmap if correction fails
+        }
+    }
+
+    // Function to dispatch camera intent
+    private fun dispatchTakePictureIntent() {
+        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+        val imageFileName = "QR_$timeStamp.jpg"
+        
+        val storageDir = File(requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES), "QR_Codes")
+        if (!storageDir.exists()) {
+            storageDir.mkdirs()
+        }
+        
+        val imageFile = File(storageDir, imageFileName)
+        photoUri = FileProvider.getUriForFile(
+            requireContext(),
+            "${requireContext().packageName}.fileprovider",
+            imageFile
+        )
+        
+        val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE).apply {
+            putExtra(MediaStore.EXTRA_OUTPUT, photoUri)
+        }
+        
+        try {
+            cameraLauncher.launch(photoUri)
+        } catch (e: Exception) {
+            Toast.makeText(requireContext(), "카메라를 열 수 없습니다: ${e.message}", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    // New function to generate QR code with circular logo and border
+    fun generateQRCodeWithCircularLogoAndBorder(content: String, size: Int = 512, logo: Bitmap): Bitmap? {
+        return try {
+            val bitMatrix = MultiFormatWriter().encode(
+                content,
+                BarcodeFormat.QR_CODE,
+                size,
+                size
+            )
+
+            val qrBitmap = Bitmap.createBitmap(size, size, Bitmap.Config.ARGB_8888)
+            for (x in 0 until size) {
+                for (y in 0 until size) {
+                    val color = if (bitMatrix[x, y]) foregroundColor else backgroundColor
+                    qrBitmap.setPixel(x, y, color)
+                }
+            }
+
+            // 원형 로고 + 테두리 생성
+            val circularLogo = createCircularLogoWithBorder(logo, borderSize = 8, borderColor = borderColor)
+            val scaledLogo = Bitmap.createScaledBitmap(circularLogo, size / 5, size / 5, false)
+
+            // QR 코드에 로고 합성
+            val canvas = Canvas(qrBitmap)
+            val centerX = (qrBitmap.width - scaledLogo.width) / 2
+            val centerY = (qrBitmap.height - scaledLogo.height) / 2
+            canvas.drawBitmap(scaledLogo, centerX.toFloat(), centerY.toFloat(), null)
+
+            // Add border to QR code
+            val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+            paint.style = Paint.Style.STROKE
+            paint.color = borderColor
+            paint.strokeWidth = 4f // Border width
+            canvas.drawRect(2f, 2f, (size - 2).toFloat(), (size - 2).toFloat(), paint)
+
+            qrBitmap
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()
