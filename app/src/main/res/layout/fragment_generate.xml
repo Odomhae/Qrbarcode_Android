@@ -3,7 +3,8 @@
     android:orientation="vertical"
     android:padding="16dp"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/background_light">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -19,7 +20,14 @@
                 android:id="@+id/editText"
                 android:hint="내용 입력"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="56dp"
+                android:background="@color/surface_white"
+                android:textColor="@color/text_primary"
+                android:textColorHint="@color/text_secondary"
+                android:padding="16dp"
+                android:textSize="16sp"
+                android:elevation="2dp"
+                android:layout_marginBottom="16dp"/>
 
             <!-- Customization Panel -->
             <LinearLayout
@@ -35,20 +43,20 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="QR 코드 커스터마이징"
-                    android:textSize="16sp"
+                    android:textSize="18sp"
                     android:textStyle="bold"
-                    android:textColor="@android:color/black"
-                    android:layout_marginBottom="12dp" />
+                    android:textColor="@color/text_primary"
+                    android:layout_marginBottom="16dp" />
 
                 <!-- Color Selection -->
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="색상 선택"
-                    android:textSize="14sp"
+                    android:textSize="16sp"
                     android:textStyle="bold"
-                    android:textColor="@android:color/black"
-                    android:layout_marginBottom="8dp" />
+                    android:textColor="@color/text_primary"
+                    android:layout_marginBottom="12dp" />
 
                 <LinearLayout
                     android:orientation="horizontal"
@@ -67,8 +75,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="전경색 (QR 코드)"
-                            android:textSize="12sp"
-                            android:textColor="@android:color/black" />
+                            android:textSize="14sp"
+                            android:textColor="@color/text_primary"
+                            android:layout_marginBottom="4dp" />
 
                         <LinearLayout
                             android:orientation="horizontal"
@@ -79,17 +88,20 @@
                             <View
                                 android:id="@+id/foregroundColorPreview"
                                 android:layout_width="40dp"
-                                android:layout_height="match_parent"
-                                android:background="@android:color/black" />
+                                android:layout_height="40dp"
+                                android:background="@drawable/color_preview_background"
+                                android:backgroundTint="@android:color/black" />
 
                             <Button
                                 android:id="@+id/btnPickForegroundColor"
                                 android:text="선택"
                                 android:layout_width="0dp"
-                                android:layout_height="match_parent"
+                                android:layout_height="40dp"
                                 android:layout_weight="1"
                                 android:layout_marginStart="8dp"
-                                android:textSize="12sp" />
+                                android:textSize="14sp"
+                                android:textColor="@color/white"
+                                android:background="@drawable/btn_secondary_background" />
                         </LinearLayout>
                     </LinearLayout>
 
@@ -104,8 +116,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="배경색"
-                            android:textSize="12sp"
-                            android:textColor="@android:color/black" />
+                            android:textSize="14sp"
+                            android:textColor="@color/text_primary"
+                            android:layout_marginBottom="4dp" />
 
                         <LinearLayout
                             android:orientation="horizontal"
@@ -116,26 +129,29 @@
                             <View
                                 android:id="@+id/backgroundColorPreview"
                                 android:layout_width="40dp"
-                                android:layout_height="match_parent"
-                                android:background="@android:color/white" />
+                                android:layout_height="40dp"
+                                android:background="@drawable/color_preview_background"
+                                android:backgroundTint="@color/white" />
 
                             <Button
                                 android:id="@+id/btnPickBackgroundColor"
                                 android:text="선택"
                                 android:layout_width="0dp"
-                                android:layout_height="match_parent"
+                                android:layout_height="40dp"
                                 android:layout_weight="1"
                                 android:layout_marginStart="8dp"
-                                android:textSize="12sp" />
+                                android:textSize="14sp"
+                                android:textColor="@color/white"
+                                android:background="@drawable/btn_secondary_background" />
                         </LinearLayout>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="테두리색"
-                            android:textSize="12sp"
-                            android:textColor="@android:color/black"
-                            android:layout_marginTop="8dp" />
+                            android:textSize="14sp"
+                            android:textColor="@color/text_primary"
+                            android:layout_marginBottom="4dp" />
 
                         <LinearLayout
                             android:orientation="horizontal"
@@ -146,17 +162,20 @@
                             <View
                                 android:id="@+id/borderColorPreview"
                                 android:layout_width="40dp"
-                                android:layout_height="match_parent"
-                                android:background="@android:color/black" />
+                                android:layout_height="40dp"
+                                android:background="@drawable/color_preview_background"
+                                android:backgroundTint="@android:color/black" />
 
                             <Button
                                 android:id="@+id/btnPickBorderColor"
                                 android:text="선택"
                                 android:layout_width="0dp"
-                                android:layout_height="match_parent"
+                                android:layout_height="40dp"
                                 android:layout_weight="1"
                                 android:layout_marginStart="8dp"
-                                android:textSize="12sp" />
+                                android:textSize="14sp"
+                                android:textColor="@color/white"
+                                android:background="@drawable/btn_secondary_background" />
                         </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
@@ -166,10 +185,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="이미지 옵션"
-                    android:textSize="14sp"
+                    android:textSize="16sp"
                     android:textStyle="bold"
-                    android:textColor="@android:color/black"
-                    android:layout_marginBottom="8dp" />
+                    android:textColor="@color/text_primary"
+                    android:layout_marginBottom="12dp" />
 
                 <LinearLayout
                     android:orientation="horizontal"
@@ -181,37 +200,45 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="이미지 추가"
-                        android:textColor="@android:color/black" />
+                        android:textColor="@color/text_primary"
+                        android:textSize="14sp"
+                        android:buttonTint="@color/primary_blue" />
 
                     <Button
                         android:id="@+id/btnSelectImage"
                         android:text="갤러리"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="48dp"
                         android:layout_weight="1"
                         android:layout_marginStart="8dp"
                         android:enabled="false"
-                        android:textSize="12sp" />
+                        android:textSize="14sp"
+                        android:textColor="@color/white"
+                        android:background="@drawable/btn_secondary_background"
+                        android:elevation="2dp" />
 
                     <Button
                         android:id="@+id/btnTakePhoto"
                         android:text="카메라"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
+                        android:layout_height="48dp"
                         android:layout_weight="1"
                         android:layout_marginStart="4dp"
                         android:enabled="false"
-                        android:textSize="12sp" />
+                        android:textSize="14sp"
+                        android:textColor="@color/white"
+                        android:background="@drawable/btn_secondary_background"
+                        android:elevation="2dp" />
                 </LinearLayout>
 
                 <ImageView
                     android:id="@+id/selectedImagePreview"
-                    android:layout_width="60dp"
-                    android:layout_height="60dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginTop="12dp"
                     android:layout_gravity="center"
                     android:scaleType="centerCrop"
-                    android:background="@android:drawable/ic_menu_gallery"
+                    android:background="@drawable/color_preview_background"
                     android:visibility="gone" />
 
             </LinearLayout>
@@ -219,9 +246,12 @@
             <ImageView
                 android:id="@+id/imageView"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:layout_marginTop="16dp"
-                android:scaleType="fitCenter"/>
+                android:layout_height="320dp"
+                android:layout_marginTop="20dp"
+                android:scaleType="fitCenter"
+                android:background="@color/surface_white"
+                android:elevation="4dp"
+                android:padding="8dp"/>
 
         </LinearLayout>
     </ScrollView>
@@ -237,15 +267,26 @@
             android:id="@+id/buttonGenerate"
             android:text="QR 코드 생성"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="56dp"
+            android:layout_marginTop="16dp"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="@color/white"
+            android:background="@drawable/btn_primary_background"
+            android:elevation="4dp" />
 
     </LinearLayout>
 
     <Button
         android:id="@+id/buttonShare"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginTop="8dp"
         android:text="공유하기"
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:background="@drawable/btn_secondary_background"
+        android:elevation="2dp"
         android:visibility="invisible" />
 
 

@@ -152,21 +152,21 @@ class GenerateFragment : Fragment() {
         binding.btnPickForegroundColor.setOnClickListener {
             showColorPicker(foregroundColor) { color ->
                 foregroundColor = color
-                binding.foregroundColorPreview.setBackgroundColor(color)
+                binding.foregroundColorPreview.backgroundTintList = android.content.res.ColorStateList.valueOf(color)
             }
         }
 
         binding.btnPickBackgroundColor.setOnClickListener {
             showColorPicker(backgroundColor) { color ->
                 backgroundColor = color
-                binding.backgroundColorPreview.setBackgroundColor(color)
+                binding.backgroundColorPreview.backgroundTintList = android.content.res.ColorStateList.valueOf(color)
             }
         }
 
         binding.btnPickBorderColor.setOnClickListener {
             showColorPicker(borderColor) { color ->
                 borderColor = color
-                binding.borderColorPreview.setBackgroundColor(color)
+                binding.borderColorPreview.backgroundTintList = android.content.res.ColorStateList.valueOf(color)
             }
         }
 

@@ -18,4 +18,16 @@ class HistoryViewModel(application: Application) : AndroidViewModel(application)
             dao.insert(HistoryItem(qrString = content))
         }
     }
+
+    fun deleteHistory(historyItem: HistoryItem) {
+        viewModelScope.launch {
+            dao.delete(historyItem)
+        }
+    }
+
+    fun clearAllHistory() {
+        viewModelScope.launch {
+            dao.deleteAll()
+        }
+    }
 }

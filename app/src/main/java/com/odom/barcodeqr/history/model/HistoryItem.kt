@@ -7,6 +7,6 @@ import androidx.room.Entity
 @Entity
 data class HistoryItem(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
-    // val qrtime : String,
-    val qrString : String
+    val qrString : String,
+    val createdAt: Long = System.currentTimeMillis()
 )
