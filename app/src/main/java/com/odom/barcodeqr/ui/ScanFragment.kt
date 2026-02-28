@@ -1,6 +1,7 @@
 package com.odom.barcodeqr.ui
 
 import android.Manifest
+import android.R.id.input
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,9 +12,11 @@ import androidx.appcompat.app.AlertDialog
 import androidx.camera.core.CameraSelector
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.odom.barcodeqr.R
 import com.odom.barcodeqr.databinding.FragmentScanBinding
+import com.odom.barcodeqr.history.HistoryViewModel
 
 class ScanFragment : Fragment() {
 
@@ -26,6 +29,16 @@ class ScanFragment : Fragment() {
     private var torchOn = false
     private var cameraSelector: CameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
+    private lateinit var viewModel: HistoryViewModel
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        viewModel = ViewModelProvider(
+            this,
+            ViewModelProvider.AndroidViewModelFactory.getInstance(requireActivity().application)
+        )[HistoryViewModel::class.java]
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -89,6 +102,7 @@ class ScanFragment : Fragment() {
             .setMessage(result.text.toString() + " / " + result.barcodeFormat)
             .setPositiveButton("저장") { dialog, _ ->
                 // 확인 버튼 클릭 시 실행할 코드
+                viewModel.addHistory(result.text)
                 dialog.dismiss()
             }
             .setNegativeButton("취소") { dialog, _ ->

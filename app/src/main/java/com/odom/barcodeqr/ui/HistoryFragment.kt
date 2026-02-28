@@ -63,7 +63,7 @@ class HistoryFragment : Fragment() {
             historyList = emptyList(),
             onItemClick = { historyItem ->
                 // Handle item click - could navigate to generate with this content
-                navigateToGenerate(historyItem.qrString)
+                //navigateToGenerate(historyItem.qrString)
             },
             onCopyClick = { historyItem ->
                 // Copy is handled in adapter

@@ -14,6 +14,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:padding="16dp"
+        android:background="@color/background_light"
         android:gravity="center_vertical">
 
         <!-- QR Preview -->
@@ -73,6 +74,7 @@
 
             <ImageView
                 android:id="@+id/btnRegenerate"
+                android:visibility="gone"
                 android:layout_width="32dp"
                 android:layout_height="32dp"
                 android:src="@android:drawable/ic_menu_rotate"

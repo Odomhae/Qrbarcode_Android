@@ -70,7 +70,10 @@ class HistoryModernAdapter(
             tvTimestamp.text = getRelativeTime(historyItem.createdAt)
 
             // Set click listeners
-            itemView.setOnClickListener { onItemClick(historyItem) }
+            itemView.setOnClickListener {
+              //  onItemClick(historyItem)
+                copyToClipboard(historyItem.qrString)
+            }
             
             btnCopy.setOnClickListener { 
                 copyToClipboard(historyItem.qrString)
