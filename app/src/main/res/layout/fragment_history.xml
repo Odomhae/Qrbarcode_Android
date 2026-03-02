@@ -70,6 +70,15 @@
             android:visibility="gone" />
     </LinearLayout>
 
+    <!-- Banner Ad -->
+    <com.google.android.gms.ads.AdView
+        android:id="@+id/adView_history"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        app:adSize="BANNER"
+        app:adUnitId="@string/ad_unit_id_banner_history" />
+
     <!-- RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvHistory"

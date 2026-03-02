@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">QR Generator - Free Custom QR</string>
+    <string name="app_name">ColorPop QR Generator - Free Custom QR</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
@@ -44,7 +44,7 @@
     <string name="hint_content_input">Enter content</string>
     <string name="title_qr_customization">QR Code Customization</string>
     <string name="title_color_selection">Color Selection</string>
-    <string name="label_foreground_color">Foreground Color (QR Code)</string>
+    <string name="label_foreground_color">QR Code Color</string>
     <string name="label_background_color">Background Color</string>
     <string name="label_border_color">Border Color</string>
     <string name="btn_select">Select</string>
@@ -58,5 +58,15 @@
     <string name="empty_history_title">No QR Code History</string>
     <string name="empty_history_subtitle">QR codes will be displayed here when generated</string>
     <string name="dialog_content_placeholder">Content will be displayed here.</string>
+    <string name="msg_enter_content">Please enter content</string>
+
+
+    <!-- MainActivity -->
+    <string name="msg_back_press_to_exit">Press back again to exit</string>
+
+    <!-- AdMob Ad Unit IDs (Test IDs) -->
+    <string name="ad_unit_id_banner_generate">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="ad_unit_id_banner_history">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="ad_unit_id_interstitial">ca-app-pub-3940256099942544/1033173712</string>
 
 </resources>

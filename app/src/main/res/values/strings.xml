@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">QR생성_무료 커스텀QR</string>
+    <string name="app_name">컬러QR꾸미기_무료 커스텀QR</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
@@ -43,7 +43,7 @@
     <string name="hint_content_input">내용 입력</string>
     <string name="title_qr_customization">QR 코드 커스터마이징</string>
     <string name="title_color_selection">색상 선택</string>
-    <string name="label_foreground_color">전경색 (QR 코드)</string>
+    <string name="label_foreground_color">QR 코드색</string>
     <string name="label_background_color">배경색</string>
     <string name="label_border_color">테두리색</string>
     <string name="btn_select">선택</string>
@@ -57,5 +57,14 @@
     <string name="empty_history_title">QR 코드 기록이 없습니다</string>
     <string name="empty_history_subtitle">QR 코드를 생성하면 여기에 표시됩니다</string>
     <string name="dialog_content_placeholder">내용이 여기에 표시됩니다.</string>
+    <string name="msg_enter_content">내용을 입력해주세요</string>
+
+    <!-- MainActivity -->
+    <string name="msg_back_press_to_exit">한번 더 누르면 종료됩니다</string>
+
+    <!-- AdMob Ad Unit IDs (Test IDs) -->
+    <string name="ad_unit_id_banner_generate">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="ad_unit_id_banner_history">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="ad_unit_id_interstitial">ca-app-pub-3940256099942544/1033173712</string>
 
 </resources>

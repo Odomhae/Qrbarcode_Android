@@ -53,6 +53,12 @@ dependencies {
     kapt("androidx.room:room-compiler:2.8.3")
     implementation("androidx.room:room-ktx:2.8.3")
 
+    // Review
+    implementation("com.google.android.play:review:2.0.1")
+    implementation("com.google.android.play:review-ktx:2.0.1")
+    
+    // AdMob
+    implementation("com.google.android.gms:play-services-ads:23.0.0")
 
     implementation("org.jetbrains.kotlinx:kotlinx-metadata-jvm:0.7.0")
 

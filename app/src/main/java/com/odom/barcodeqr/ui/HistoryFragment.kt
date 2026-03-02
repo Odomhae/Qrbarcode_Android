@@ -21,6 +21,8 @@ import com.odom.barcodeqr.adapter.HistoryModernAdapter
 import com.odom.barcodeqr.databinding.FragmentHistoryBinding
 import com.odom.barcodeqr.history.HistoryViewModel
 import com.odom.barcodeqr.history.model.HistoryItem
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
 
 class HistoryFragment : Fragment() {
 
@@ -51,11 +53,17 @@ class HistoryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         
+        setupBannerAd()
         setupRecyclerView()
         setupSearch()
         setupClearButton()
         
         observeHistory()
+    }
+
+    private fun setupBannerAd() {
+        val adRequest = AdRequest.Builder().build()
+        binding.adViewHistory.loadAd(adRequest)
     }
 
     private fun setupRecyclerView() {

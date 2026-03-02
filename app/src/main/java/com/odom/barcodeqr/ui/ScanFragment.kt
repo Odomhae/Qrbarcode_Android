@@ -19,6 +19,7 @@ import com.journeyapps.barcodescanner.BarcodeCallback
 import com.odom.barcodeqr.R
 import com.odom.barcodeqr.databinding.FragmentScanBinding
 import com.odom.barcodeqr.history.HistoryViewModel
+import com.odom.barcodeqr.utils.AdManager
 
 class ScanFragment : Fragment() {
 
@@ -32,6 +33,7 @@ class ScanFragment : Fragment() {
     private var cameraSelector: CameraSelector = CameraSelector.DEFAULT_BACK_CAMERA
 
     private lateinit var viewModel: HistoryViewModel
+    private lateinit var adManager: AdManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,6 +59,8 @@ class ScanFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        
+        adManager = AdManager(requireContext())
 
         binding.btFlash.setOnClickListener {
             toggleFlash()
@@ -150,6 +154,13 @@ class ScanFragment : Fragment() {
             viewModel.addHistory(result.text)
             dialog.dismiss()
             binding.zxingBarcodeScanner.resume()
+            
+            // Check if we should show interstitial ad
+            if (adManager.incrementScanCount()) {
+                adManager.showInterstitialAd(requireActivity()) {
+                    binding.zxingBarcodeScanner.resume()
+                }
+            }
         }
 
         btnCancel.setOnClickListener {

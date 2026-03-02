@@ -19,6 +19,7 @@ import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.activity.result.contract.ActivityResultContracts
@@ -30,6 +31,9 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdView
+import com.google.android.material.internal.ViewUtils.hideKeyboard
 import com.google.zxing.BarcodeFormat
 import com.google.zxing.MultiFormatWriter
 import com.google.zxing.common.BitMatrix
@@ -37,6 +41,7 @@ import com.journeyapps.barcodescanner.BarcodeEncoder
 import com.odom.barcodeqr.R
 import com.odom.barcodeqr.databinding.FragmentGenerateBinding
 import com.odom.barcodeqr.history.HistoryViewModel
+import com.odom.barcodeqr.utils.AdManager
 import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
@@ -57,6 +62,7 @@ class GenerateFragment : Fragment() {
     private var borderColor = Color.BLACK
     private var selectedLogoBitmap: Bitmap? = null
     private var addImageToQR = false
+    private lateinit var adManager: AdManager
 
     // Activity result launcher for image selection
     private val imagePickerLauncher = registerForActivityResult(
@@ -113,10 +119,20 @@ class GenerateFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        binding.editText.setText("")
+        binding.imageView.visibility = View.GONE
+
+        adManager = AdManager(requireContext())
         setupCustomizationPanel()
+        setupBannerAd()
 
         binding.buttonGenerate.setOnClickListener {
-            generateCustomizedQRCode()
+            if (binding.editText.text.isNullOrBlank()) {
+                Toast.makeText(requireContext(), getString(R.string.msg_enter_content), Toast.LENGTH_SHORT).show()
+            } else {
+                generateCustomizedQRCode()
+            }
+
         }
 
         // 공유하기
@@ -130,6 +146,12 @@ class GenerateFragment : Fragment() {
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
            // findNavController().navigate(R.id.navigation_radio)
         }
+    }
+
+    private fun setupBannerAd() {
+        val adView = binding.adViewGenerate
+        val adRequest = AdRequest.Builder().build()
+        adView.loadAd(adRequest)
     }
 
     private fun setupCustomizationPanel() {
@@ -190,6 +212,9 @@ class GenerateFragment : Fragment() {
     }
 
     private fun generateCustomizedQRCode() {
+        hideKeyboard()
+        binding.imageView.visibility = View.VISIBLE
+
         var input = binding.editText.text.toString()
         val qrBitmap = if (addImageToQR && selectedLogoBitmap != null) {
             generateQRCodeWithCircularLogoAndBorder(input, 512, selectedLogoBitmap!!)
@@ -200,6 +225,21 @@ class GenerateFragment : Fragment() {
         binding.imageView.setImageBitmap(qrBitmap)
         viewModel.addHistory(input.toString())
         binding.buttonShare.visibility = View.VISIBLE
+
+        binding.svContent.post {
+            binding.svContent.fullScroll(View.FOCUS_DOWN)
+        }
+        
+        // Check if we should show interstitial ad
+        if (adManager.incrementGenerateCount()) {
+            adManager.showInterstitialAd(requireActivity())
+        }
+    }
+
+    private fun hideKeyboard() {
+        val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(binding.editText.windowToken, 0)
+        binding.editText.clearFocus() // EditText 포커스 해제
     }
 
     fun generateQRCode(content: String, size: Int = 512): Bitmap? {
