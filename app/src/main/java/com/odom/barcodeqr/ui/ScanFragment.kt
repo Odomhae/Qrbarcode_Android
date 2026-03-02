@@ -7,6 +7,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.camera.core.CameraSelector
@@ -97,21 +99,66 @@ class ScanFragment : Fragment() {
     val barcodeCallback : BarcodeCallback = BarcodeCallback { result ->
         binding.zxingBarcodeScanner.pause()
 
-        AlertDialog.Builder(requireContext())
-            .setTitle(result.result.toString())
-            .setMessage(result.text.toString() + " / " + result.barcodeFormat)
-            .setPositiveButton("저장") { dialog, _ ->
-                // 확인 버튼 클릭 시 실행할 코드
-                viewModel.addHistory(result.text)
-                dialog.dismiss()
-            }
-            .setNegativeButton("취소") { dialog, _ ->
-                // 취소 버튼 클릭 시 실행할 코드
-                dialog.dismiss()
-                binding.zxingBarcodeScanner.resume()
+
+        val dialogView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_scan_result, null)
+
+        // 2. AlertDialog 생성
+        val dialog = AlertDialog.Builder(requireContext())
+            .setView(dialogView)
+            .setCancelable(false) // 밖을 눌러도 안 꺼지게 설정 (선택사항)
+            .create()
+
+        // 3. 커스텀 뷰 내의 위젯 참조 및 데이터 설정
+        val tvContent = dialogView.findViewById<TextView>(R.id.tv_dialog_content)
+        val btnSave = dialogView.findViewById<Button>(R.id.btn_dialog_save)
+        val btnCancel = dialogView.findViewById<Button>(R.id.btn_dialog_cancel)
+
+        tvContent.text = result.text ?: ""
+        val isUrl = android.util.Patterns.WEB_URL.matcher(result.text).matches()
+        if (isUrl) {
+            // URL인 경우 스타일 변경 (파란색, 밑줄)
+            tvContent.setTextColor(android.graphics.Color.BLUE)
+            tvContent.paintFlags = tvContent.paintFlags or android.graphics.Paint.UNDERLINE_TEXT_FLAG
+
+        }
+
+        tvContent.setOnClickListener {
+            viewModel.addHistory(result.text)
+
+            if (isUrl) {
+                try {
+                    // URL이 http:// 또는 https://로 시작하지 않으면 붙여줌
+                    val url = if (!tvContent.text.startsWith("http://") && !tvContent.text.startsWith("https://")) {
+                        "http://$tvContent.text"
+                    } else {
+                        tvContent.text
+                    }
+                    val intent = android.content.Intent(android.content.Intent.ACTION_VIEW, android.net.Uri.parse(
+                        url as String?
+                    ))
+                    startActivity(intent)
+                } catch (e: Exception) {
+                    Toast.makeText(requireContext(), getString(R.string.error_invalid_url), Toast.LENGTH_SHORT).show()
+                }
+
             }
 
-            .show()
+        }
+
+        // 4. 버튼 클릭 리스너 설정
+        btnSave.setOnClickListener {
+            viewModel.addHistory(result.text)
+            dialog.dismiss()
+            binding.zxingBarcodeScanner.resume()
+        }
+
+        btnCancel.setOnClickListener {
+            dialog.dismiss()
+            binding.zxingBarcodeScanner.resume()
+        }
+
+        // 5. 다이얼로그 표시
+        dialog.show()
 
     }
 

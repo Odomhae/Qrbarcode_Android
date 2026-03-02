@@ -69,7 +69,7 @@ class GenerateFragment : Fragment() {
                 binding.selectedImagePreview.setImageBitmap(selectedLogoBitmap)
                 binding.selectedImagePreview.visibility = View.VISIBLE
             } catch (e: Exception) {
-                Toast.makeText(requireContext(), "이미지를 불러올 수 없습니다", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.error_load_image), Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -86,28 +86,13 @@ class GenerateFragment : Fragment() {
                 binding.selectedImagePreview.setImageBitmap(selectedLogoBitmap)
                 binding.selectedImagePreview.visibility = View.VISIBLE
             } catch (e: Exception) {
-                Toast.makeText(requireContext(), "사진을 불러올 수 없습니다", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), getString(R.string.error_take_photo), Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    companion object {
-        fun newInstance(selectedType : String) : GenerateFragment {
-            val fragment = GenerateFragment()
-            val bundle = Bundle()
-            bundle.putString("selectedType", selectedType)
-            fragment.arguments = bundle
-
-            return fragment
-        }
-
-    }
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-      //  val selectedType = args.selectedType
-      //  Toast.makeText(requireContext(), selectedType , Toast.LENGTH_SHORT).show()
 
         // AndroidViewModel은 Application을 필요로 하므로 requireActivity().application을 전달
         viewModel = ViewModelProvider(
@@ -136,7 +121,7 @@ class GenerateFragment : Fragment() {
 
         // 공유하기
         binding.buttonShare.setOnClickListener {
-            val imageUri = saveBitmapToFile(requireContext(),  binding.imageView.drawable.toBitmap(), "qr_code_example")
+            val imageUri = saveBitmapToFile(requireContext(),  binding.imageView.drawable.toBitmap(), getString(R.string.qr_code_filename))
             if (imageUri != null) {
                 shareImage(requireContext(), imageUri)
             }
@@ -425,7 +410,7 @@ if (imageUri != null) {
             putExtra(Intent.EXTRA_STREAM, imageUri)
             addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
         }
-        context.startActivity(Intent.createChooser(shareIntent, "QR 코드 공유하기"))
+        context.startActivity(Intent.createChooser(shareIntent, getString(R.string.share_qr_code)))
     }
 
     // QR 코드 이미지를 갤러리에 저장하는 함수 (MediaStore 방식)
@@ -525,7 +510,7 @@ if (imageUri != null) {
         try {
             cameraLauncher.launch(photoUri)
         } catch (e: Exception) {
-            Toast.makeText(requireContext(), "카메라를 열 수 없습니다: ${e.message}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(requireContext(), getString(R.string.error_camera_open, e.message), Toast.LENGTH_SHORT).show()
         }
     }
 

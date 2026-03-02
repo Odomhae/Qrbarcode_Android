@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">QR Generator - Free Custom QR</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+
+    <string name="title_generate">QR Generate</string>
+    <string name="title_scan">Barcode Scan</string>
+    <string name="title_history">QR History</string>
+
+    <string name="torch_on">Flash On</string>
+    <string name="torch_off">Flash Off</string>
+
+    <!-- Dialog Buttons -->
+    <string name="dialog_save">Save</string>
+    <string name="dialog_cancel">Cancel</string>
+    <string name="dialog_confirm">Confirm</string>
+    <string name="dialog_delete">Delete</string>
+
+    <!-- HistoryFragment Strings -->
+    <string name="clear_history_title">Clear All</string>
+    <string name="clear_history_message">Do you want to delete all history?\nDeleted data cannot be recovered.</string>
+    <string name="scan_result_format">%1$s / %2$s</string>
+
+    <!-- GenerateFragment Strings -->
+    <string name="error_load_image">Cannot load image</string>
+    <string name="error_take_photo">Cannot load photo</string>
+    <string name="qr_code_filename">qr_code_example</string>
+    <string name="generate_qr_content_hint">Please enter content</string>
+
+    <!-- Color Picker / Customization Labels -->
+    <string name="pick_foreground_color">Select Foreground Color</string>
+    <string name="pick_background_color">Select Background Color</string>
+    <string name="pick_border_color">Select Border Color</string>
+    <string name="add_image_option">Add Image</string>
+
+    <!-- Hardcoded strings from Kotlin files -->
+    <string name="error_invalid_url">Cannot connect to this address.</string>
+    <string name="share_qr_code">Share QR Code</string>
+    <string name="error_camera_open">Cannot open camera: %1$s</string>
+
+    <!-- Hardcoded strings from XML layout files -->
+    <string name="hint_content_input">Enter content</string>
+    <string name="title_qr_customization">QR Code Customization</string>
+    <string name="title_color_selection">Color Selection</string>
+    <string name="label_foreground_color">Foreground Color (QR Code)</string>
+    <string name="label_background_color">Background Color</string>
+    <string name="label_border_color">Border Color</string>
+    <string name="btn_select">Select</string>
+    <string name="title_image_options">Image Options</string>
+    <string name="btn_gallery">Gallery</string>
+    <string name="btn_camera">Camera</string>
+    <string name="btn_generate_qr">Generate QR Code</string>
+    <string name="btn_share">Share</string>
+    <string name="title_history_header">QR History</string>
+    <string name="hint_search">Search...</string>
+    <string name="empty_history_title">No QR Code History</string>
+    <string name="empty_history_subtitle">QR codes will be displayed here when generated</string>
+    <string name="dialog_content_placeholder">Content will be displayed here.</string>
+
+</resources>

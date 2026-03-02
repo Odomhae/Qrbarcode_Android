@@ -11,4 +11,51 @@
     <string name="torch_on">플래시 켜기</string>
     <string name="torch_off">플래시 끄기</string>
 
+    <!-- Dialog Buttons -->
+    <string name="dialog_save">저장</string>
+    <string name="dialog_cancel">취소</string>
+    <string name="dialog_confirm">확인</string>
+    <string name="dialog_delete">삭제</string>
+
+    <!-- HistoryFragment Strings -->
+    <string name="clear_history_title">전체 삭제</string>
+    <string name="clear_history_message">모든 기록을 삭제하시겠습니까?\n삭제된 데이터는 복구할 수 없습니다.</string>
+    <string name="scan_result_format">%1$s / %2$s</string>
+
+    <!-- GenerateFragment Strings -->
+    <string name="error_load_image">이미지를 불러올 수 없습니다</string>
+    <string name="error_take_photo">사진을 불러올 수 없습니다</string>
+    <string name="qr_code_filename">qr_code_example</string>
+    <string name="generate_qr_content_hint">내용을 입력해주세요</string>
+
+    <!-- Color Picker / Customization Labels -->
+    <string name="pick_foreground_color">전경색 선택</string>
+    <string name="pick_background_color">배경색 선택</string>
+    <string name="pick_border_color">테두리색 선택</string>
+    <string name="add_image_option">이미지 추가</string>
+
+    <!-- Hardcoded strings from Kotlin files -->
+    <string name="error_invalid_url">연결할 수 없는 주소입니다.</string>
+    <string name="share_qr_code">QR 코드 공유하기</string>
+    <string name="error_camera_open">카메라를 열 수 없습니다: %1$s</string>
+
+    <!-- Hardcoded strings from XML layout files -->
+    <string name="hint_content_input">내용 입력</string>
+    <string name="title_qr_customization">QR 코드 커스터마이징</string>
+    <string name="title_color_selection">색상 선택</string>
+    <string name="label_foreground_color">전경색 (QR 코드)</string>
+    <string name="label_background_color">배경색</string>
+    <string name="label_border_color">테두리색</string>
+    <string name="btn_select">선택</string>
+    <string name="title_image_options">이미지 옵션</string>
+    <string name="btn_gallery">갤러리</string>
+    <string name="btn_camera">카메라</string>
+    <string name="btn_generate_qr">QR 코드 생성</string>
+    <string name="btn_share">공유하기</string>
+    <string name="title_history_header">QR 기록</string>
+    <string name="hint_search">검색...</string>
+    <string name="empty_history_title">QR 코드 기록이 없습니다</string>
+    <string name="empty_history_subtitle">QR 코드를 생성하면 여기에 표시됩니다</string>
+    <string name="dialog_content_placeholder">내용이 여기에 표시됩니다.</string>
+
 </resources>

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/navigation_scan">
+    app:startDestination="@+id/navigation_generate">
 
     <fragment
         android:id="@+id/navigation_scan"
@@ -14,12 +14,8 @@
     <fragment
         android:id="@+id/navigation_generate"
         android:name="com.odom.barcodeqr.ui.GenerateFragment"
-        android:label="generate">
-
-        <argument android:name="selectedType"
-            app:argType="string" />
-
-    </fragment>
+        android:label="generate"
+        tools:layout="@layout/fragment_generate"/>
 
     <fragment
         android:id="@+id/navigation_history"

@@ -59,7 +59,7 @@ class HistoryModernAdapter(
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val tvContent: TextView = itemView.findViewById(R.id.tvContent)
         private val tvTimestamp: TextView = itemView.findViewById(R.id.tvTimestamp)
-        private val ivQRPreview: ImageView = itemView.findViewById(R.id.ivQRPreview)
+        //private val ivQRPreview: ImageView = itemView.findViewById(R.id.ivQRPreview)
         private val btnCopy: ImageView = itemView.findViewById(R.id.btnCopy)
         private val btnRegenerate: ImageView = itemView.findViewById(R.id.btnRegenerate)
         private val btnDelete: ImageView = itemView.findViewById(R.id.btnDelete)
