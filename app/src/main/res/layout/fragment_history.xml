@@ -77,7 +77,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
         app:adSize="BANNER"
-        app:adUnitId="@string/ad_unit_id_banner_history" />
+        app:adUnitId="@string/TEST_ADMOB_BANNER_ID" />
 
     <!-- RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView

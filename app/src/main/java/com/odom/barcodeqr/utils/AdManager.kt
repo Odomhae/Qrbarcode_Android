@@ -29,7 +29,7 @@ class AdManager(private val context: Context) {
     private fun loadInterstitialAd() {
         val adRequest = AdRequest.Builder().build()
         
-        InterstitialAd.load(context, context.getString(com.odom.barcodeqr.R.string.ad_unit_id_interstitial), adRequest, object : InterstitialAdLoadCallback() {
+        InterstitialAd.load(context, context.getString(com.odom.barcodeqr.R.string.TEST_ADMOB_FULLSCREEN_ID), adRequest, object : InterstitialAdLoadCallback() {
             override fun onAdLoaded(ad: InterstitialAd) {
                 interstitialAd = ad
             }

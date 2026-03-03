@@ -243,7 +243,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 app:adSize="BANNER"
-                app:adUnitId="@string/ad_unit_id_banner_generate" />
+                app:adUnitId="@string/TEST_ADMOB_BANNER_ID" />
 
             <ImageView
                 android:id="@+id/imageView"

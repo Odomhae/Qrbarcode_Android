@@ -63,8 +63,12 @@
     <string name="msg_back_press_to_exit">한번 더 누르면 종료됩니다</string>
 
     <!-- AdMob Ad Unit IDs (Test IDs) -->
-    <string name="ad_unit_id_banner_generate">ca-app-pub-3940256099942544/6300978111</string>
-    <string name="ad_unit_id_banner_history">ca-app-pub-3940256099942544/6300978111</string>
-    <string name="ad_unit_id_interstitial">ca-app-pub-3940256099942544/1033173712</string>
+    <string name="TEST_ADMOB_APP_ID">ca-app-pub-3940256099942544~3347511713</string>
+    <string name="TEST_ADMOB_BANNER_ID">ca-app-pub-3940256099942544/6300978111</string>
+    <string name="TEST_ADMOB_FULLSCREEN_ID">ca-app-pub-3940256099942544/1033173712</string>
+
+    <string name="REAL_ADMOB_APP_ID">ca-app-pub-6729344454320392~1643845308</string>
+    <string name="REAL_ADMOB_BANNER_ID">ca-app-pub-6729344454320392/2098306722</string>
+    <string name="REAL_ADMOB_FULLSCREEN_ID">ca-app-pub-6729344454320392/6349047506</string>
 
 </resources>
