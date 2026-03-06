@@ -62,6 +62,19 @@
     <!-- MainActivity -->
     <string name="msg_back_press_to_exit">한번 더 누르면 종료됩니다</string>
 
+    <!-- Additional hardcoded strings -->
+    <string name="copied_to_clipboard">클립보드에 복사되었습니다</string>
+
+    <!-- Time relative strings -->
+    <string name="time_just_now">방금 전</string>
+    <string name="time_minutes_ago">%1$d분 전</string>
+    <string name="time_hours_ago">%1$d시간 전</string>
+    <string name="time_days_ago">%1$d일 전</string>
+    <string name="date_format">MM월 dd일</string>
+
+    <!-- Database -->
+    <string name="db_history">history_database</string>
+
     <!-- AdMob Ad Unit IDs (Test IDs) -->
     <string name="TEST_ADMOB_APP_ID">ca-app-pub-3940256099942544~3347511713</string>
     <string name="TEST_ADMOB_BANNER_ID">ca-app-pub-3940256099942544/6300978111</string>

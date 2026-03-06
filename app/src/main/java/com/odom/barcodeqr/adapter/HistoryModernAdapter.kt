@@ -94,7 +94,7 @@ class HistoryModernAdapter(
             val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
             val clip = ClipData.newPlainText("QR Code", text)
             clipboard.setPrimaryClip(clip)
-            Toast.makeText(context, "클립보드에 복사되었습니다", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, context.getString(R.string.copied_to_clipboard), Toast.LENGTH_SHORT).show()
         }
 
         private fun getRelativeTime(timestamp: Long): String {
@@ -102,12 +102,12 @@ class HistoryModernAdapter(
             val diff = now - timestamp
 
             val returnTime = when {
-                diff < TimeUnit.MINUTES.toMillis(1) -> "방금 전"
-                diff < TimeUnit.HOURS.toMillis(1) -> "${TimeUnit.MILLISECONDS.toMinutes(diff)}분 전"
-                diff < TimeUnit.DAYS.toMillis(1) -> "${TimeUnit.MILLISECONDS.toHours(diff)}시간 전"
-                diff < TimeUnit.DAYS.toMillis(7) -> "${TimeUnit.MILLISECONDS.toDays(diff)}일 전"
+                diff < TimeUnit.MINUTES.toMillis(1) -> context.getString(R.string.time_just_now)
+                diff < TimeUnit.HOURS.toMillis(1) -> context.getString(R.string.time_minutes_ago, TimeUnit.MILLISECONDS.toMinutes(diff))
+                diff < TimeUnit.DAYS.toMillis(1) -> context.getString(R.string.time_hours_ago, TimeUnit.MILLISECONDS.toHours(diff))
+                diff < TimeUnit.DAYS.toMillis(7) -> context.getString(R.string.time_days_ago, TimeUnit.MILLISECONDS.toDays(diff))
                 else -> {
-                    val dateFormat = SimpleDateFormat("MM월 dd일", Locale.getDefault())
+                    val dateFormat = SimpleDateFormat(context.getString(R.string.date_format), Locale.getDefault())
                     dateFormat.format(Date(timestamp))
                 }
             }

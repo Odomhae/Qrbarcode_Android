@@ -64,6 +64,20 @@
     <!-- MainActivity -->
     <string name="msg_back_press_to_exit">Press back again to exit</string>
 
+    <!-- Additional hardcoded strings -->
+    <string name="copied_to_clipboard">Copied to clipboard</string>
+
+    <!-- Time relative strings -->
+    <string name="time_just_now">Just now</string>
+    <string name="time_minutes_ago">%1$d minutes ago</string>
+    <string name="time_hours_ago">%1$d hours ago</string>
+    <string name="time_days_ago">%1$d days ago</string>
+    <string name="date_format">MM dd</string>
+
+    <!-- Database -->
+    <string name="db_history">history_database</string>
+
+
     <!-- AdMob Ad Unit IDs (Test IDs) -->
     <string name="TEST_ADMOB_APP_ID">ca-app-pub-3940256099942544~3347511713</string>
     <string name="TEST_ADMOB_BANNER_ID">ca-app-pub-3940256099942544/6300978111</string>
