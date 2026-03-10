@@ -1,10 +1,8 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-//    alias(libs.plugins.kotlin.kapt)
     id(libs.plugins.kotlin.kapt.get().pluginId)
     alias(libs.plugins.androidx.navigation.safeargs)
-//    alias(libs.plugins.compose.compiler) //apply false
 
 }
 
