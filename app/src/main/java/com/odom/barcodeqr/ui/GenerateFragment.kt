@@ -16,6 +16,8 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.transition.AutoTransition
+import android.transition.TransitionManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -63,6 +65,14 @@ class GenerateFragment : Fragment() {
     private var selectedLogoBitmap: Bitmap? = null
     private var addImageToQR = false
     private lateinit var adManager: AdManager
+    private var isCustomizeExpanded = false
+
+    companion object {
+        private const val PREFS_NAME = "qr_customization"
+        private const val KEY_FG_COLOR = "fg_color"
+        private const val KEY_BG_COLOR = "bg_color"
+        private const val KEY_BORDER_COLOR = "border_color"
+    }
 
     // Activity result launcher for image selection
     private val imagePickerLauncher = registerForActivityResult(
@@ -120,10 +130,11 @@ class GenerateFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.editText.setText("")
-        binding.imageView.visibility = View.GONE
 
         adManager = AdManager(requireContext())
+        loadSavedColors()
         setupCustomizationPanel()
+        setupCustomizeToggle()
         setupBannerAd()
 
         binding.buttonGenerate.setOnClickListener {
@@ -143,8 +154,42 @@ class GenerateFragment : Fragment() {
             }
         }
 
+        // 갤러리에 저장
+        binding.btnSaveGallery.setOnClickListener {
+            val savedUri = saveBitmapToGallery(requireContext(), binding.imageView.drawable.toBitmap(), "QR_${System.currentTimeMillis()}")
+            val messageRes = if (savedUri != null) R.string.msg_saved_to_gallery else R.string.error_save_gallery
+            Toast.makeText(requireContext(), getString(messageRes), Toast.LENGTH_SHORT).show()
+        }
+
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
            // findNavController().navigate(R.id.navigation_radio)
+        }
+    }
+
+    private fun loadSavedColors() {
+        val prefs = requireContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        foregroundColor = prefs.getInt(KEY_FG_COLOR, foregroundColor)
+        backgroundColor = prefs.getInt(KEY_BG_COLOR, backgroundColor)
+        borderColor = prefs.getInt(KEY_BORDER_COLOR, borderColor)
+
+        binding.foregroundColorPreview.backgroundTintList = android.content.res.ColorStateList.valueOf(foregroundColor)
+        binding.backgroundColorPreview.backgroundTintList = android.content.res.ColorStateList.valueOf(backgroundColor)
+        binding.borderColorPreview.backgroundTintList = android.content.res.ColorStateList.valueOf(borderColor)
+    }
+
+    private fun saveColor(key: String, color: Int) {
+        requireContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+            .edit()
+            .putInt(key, color)
+            .apply()
+    }
+
+    private fun setupCustomizeToggle() {
+        binding.rowCustomizeToggle.setOnClickListener {
+            isCustomizeExpanded = !isCustomizeExpanded
+            TransitionManager.beginDelayedTransition(binding.llContentContainer, AutoTransition())
+            binding.cardCustomize.visibility = if (isCustomizeExpanded) View.VISIBLE else View.GONE
+            binding.ivCustomizeChevron.animate().rotation(if (isCustomizeExpanded) 180f else 0f).setDuration(200).start()
         }
     }
 
@@ -160,6 +205,7 @@ class GenerateFragment : Fragment() {
             showColorPicker(foregroundColor) { color ->
                 foregroundColor = color
                 binding.foregroundColorPreview.backgroundTintList = android.content.res.ColorStateList.valueOf(color)
+                saveColor(KEY_FG_COLOR, color)
             }
         }
 
@@ -167,6 +213,7 @@ class GenerateFragment : Fragment() {
             showColorPicker(backgroundColor) { color ->
                 backgroundColor = color
                 binding.backgroundColorPreview.backgroundTintList = android.content.res.ColorStateList.valueOf(color)
+                saveColor(KEY_BG_COLOR, color)
             }
         }
 
@@ -174,6 +221,7 @@ class GenerateFragment : Fragment() {
             showColorPicker(borderColor) { color ->
                 borderColor = color
                 binding.borderColorPreview.backgroundTintList = android.content.res.ColorStateList.valueOf(color)
+                saveColor(KEY_BORDER_COLOR, color)
             }
         }
 
@@ -213,7 +261,6 @@ class GenerateFragment : Fragment() {
 
     private fun generateCustomizedQRCode() {
         hideKeyboard()
-        binding.imageView.visibility = View.VISIBLE
 
         var input = binding.editText.text.toString()
         val qrBitmap = if (addImageToQR && selectedLogoBitmap != null) {
@@ -224,12 +271,13 @@ class GenerateFragment : Fragment() {
 
         binding.imageView.setImageBitmap(qrBitmap)
         viewModel.addHistory(input.toString())
-        binding.buttonShare.visibility = View.VISIBLE
+        binding.layoutResultEmpty.visibility = View.GONE
+        binding.layoutResultContent.visibility = View.VISIBLE
 
         binding.svContent.post {
-            binding.svContent.fullScroll(View.FOCUS_DOWN)
+            binding.svContent.fullScroll(View.FOCUS_UP)
         }
-        
+
         // Check if we should show interstitial ad
         if (adManager.incrementGenerateCount()) {
             adManager.showInterstitialAd(requireActivity())
@@ -463,27 +511,32 @@ if (imageUri != null) {
     }
      */
     fun saveBitmapToGallery(context: Context, bitmap: Bitmap, filename: String): Uri? {
-        val contentValues = ContentValues().apply {
-            put(MediaStore.Images.Media.DISPLAY_NAME, "$filename.png")
-            put(MediaStore.Images.Media.MIME_TYPE, "image/png")
-            put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + "/QR_Codes")
-            put(MediaStore.Images.Media.IS_PENDING, 1)
-        }
-
-        val contentResolver = context.contentResolver
-        val imageUri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
-
-        imageUri?.let { uri ->
-            contentResolver.openOutputStream(uri)?.use { outputStream ->
-                bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+        return try {
+            val contentValues = ContentValues().apply {
+                put(MediaStore.Images.Media.DISPLAY_NAME, "$filename.png")
+                put(MediaStore.Images.Media.MIME_TYPE, "image/png")
+                put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + "/QR_Codes")
+                put(MediaStore.Images.Media.IS_PENDING, 1)
             }
 
-            contentValues.clear()
-            contentValues.put(MediaStore.Images.Media.IS_PENDING, 0)
-            contentResolver.update(uri, contentValues, null, null)
-        }
+            val contentResolver = context.contentResolver
+            val imageUri = contentResolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, contentValues)
 
-        return imageUri
+            imageUri?.let { uri ->
+                contentResolver.openOutputStream(uri)?.use { outputStream ->
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+                }
+
+                contentValues.clear()
+                contentValues.put(MediaStore.Images.Media.IS_PENDING, 0)
+                contentResolver.update(uri, contentValues, null, null)
+            }
+
+            imageUri
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
     }
 
     // Function to correct image orientation

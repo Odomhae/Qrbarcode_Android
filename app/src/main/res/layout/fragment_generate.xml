@@ -7,19 +7,6 @@
     android:layout_height="match_parent"
     android:background="@color/background_light">
 
-    <EditText
-        android:id="@+id/editText"
-        android:hint="@string/hint_content_input"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:background="@color/surface_white"
-        android:textColor="@color/text_primary"
-        android:textColorHint="@color/text_secondary"
-        android:padding="16dp"
-        android:textSize="16sp"
-        android:elevation="2dp"
-        android:layout_marginBottom="8dp"/>
-
     <ScrollView
         android:id="@+id/svContent"
         android:layout_width="match_parent"
@@ -27,214 +14,360 @@
         android:layout_weight="1">
 
         <LinearLayout
+            android:id="@+id/llContentContainer"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <!-- Customization Panel -->
-            <LinearLayout
-                android:id="@+id/customizationPanel"
-                android:orientation="vertical"
+            <!-- Result Card -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardResult"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:background="@drawable/customization_panel_background"
-                android:padding="12dp">
+                android:layout_marginBottom="12dp"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="3dp"
+                app:cardBackgroundColor="@color/surface_white">
 
-                <!-- Color Selection -->
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/title_color_selection"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/text_primary"
-                    android:layout_marginBottom="12dp" />
-
-                <LinearLayout
-                    android:orientation="horizontal"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="12dp">
-
-                    <LinearLayout
-                        android:orientation="vertical"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginEnd="8dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/label_foreground_color"
-                            android:textSize="14sp"
-                            android:textColor="@color/text_primary"
-                            android:layout_marginBottom="4dp" />
-
-                        <LinearLayout
-                            android:orientation="horizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="40dp"
-                            android:layout_marginTop="4dp">
-
-                            <View
-                                android:id="@+id/foregroundColorPreview"
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
-                                android:background="@drawable/color_preview_background"
-                                android:backgroundTint="@android:color/black" />
-
-                            <Button
-                                android:id="@+id/btnPickForegroundColor"
-                                android:text="@string/btn_select"
-                                android:layout_width="0dp"
-                                android:layout_height="40dp"
-                                android:layout_weight="1"
-                                android:layout_marginStart="8dp"
-                                android:textSize="14sp"
-                                android:textColor="@color/white"
-                                android:background="@drawable/btn_secondary_background" />
-                        </LinearLayout>
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:orientation="vertical"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:layout_marginStart="8dp">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/label_background_color"
-                            android:textSize="14sp"
-                            android:textColor="@color/text_primary"
-                            android:layout_marginBottom="4dp" />
-
-                        <LinearLayout
-                            android:orientation="horizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="40dp"
-                            android:layout_marginTop="4dp">
-
-                            <View
-                                android:id="@+id/backgroundColorPreview"
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
-                                android:background="@drawable/color_preview_background"
-                                android:backgroundTint="@color/white" />
-
-                            <Button
-                                android:id="@+id/btnPickBackgroundColor"
-                                android:text="@string/btn_select"
-                                android:layout_width="0dp"
-                                android:layout_height="40dp"
-                                android:layout_weight="1"
-                                android:layout_marginStart="8dp"
-                                android:textSize="14sp"
-                                android:textColor="@color/white"
-                                android:background="@drawable/btn_secondary_background" />
-                        </LinearLayout>
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/label_border_color"
-                            android:textSize="14sp"
-                            android:textColor="@color/text_primary"
-                            android:layout_marginBottom="4dp" />
-
-                        <LinearLayout
-                            android:orientation="horizontal"
-                            android:layout_width="match_parent"
-                            android:layout_height="40dp"
-                            android:layout_marginTop="4dp">
-
-                            <View
-                                android:id="@+id/borderColorPreview"
-                                android:layout_width="40dp"
-                                android:layout_height="40dp"
-                                android:background="@drawable/color_preview_background"
-                                android:backgroundTint="@android:color/black" />
-
-                            <Button
-                                android:id="@+id/btnPickBorderColor"
-                                android:text="@string/btn_select"
-                                android:layout_width="0dp"
-                                android:layout_height="40dp"
-                                android:layout_weight="1"
-                                android:layout_marginStart="8dp"
-                                android:textSize="14sp"
-                                android:textColor="@color/white"
-                                android:background="@drawable/btn_secondary_background" />
-                        </LinearLayout>
-                    </LinearLayout>
-                </LinearLayout>
-
-                <!-- Image Options -->
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/title_image_options"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/text_primary"
-                    android:layout_marginBottom="12dp" />
-
-                <LinearLayout
-                    android:orientation="horizontal"
+                <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <CheckBox
-                        android:id="@+id/checkAddImage"
-                        android:layout_width="wrap_content"
+                    <!-- Empty state -->
+                    <LinearLayout
+                        android:id="@+id/layoutResultEmpty"
+                        android:orientation="vertical"
+                        android:gravity="center"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="@string/add_image_option"
-                        android:textColor="@color/text_primary"
-                        android:textSize="14sp"
-                        android:buttonTint="@color/primary_blue" />
+                        android:padding="32dp">
 
-                    <Button
-                        android:id="@+id/btnSelectImage"
-                        android:text="@string/btn_gallery"
-                        android:layout_width="0dp"
-                        android:layout_height="48dp"
-                        android:layout_weight="1"
-                        android:layout_marginStart="8dp"
-                        android:enabled="false"
-                        android:textSize="14sp"
-                        android:textColor="@color/white"
-                        android:background="@drawable/btn_secondary_background"
-                        android:elevation="2dp" />
+                        <ImageView
+                            android:layout_width="64dp"
+                            android:layout_height="64dp"
+                            android:src="@drawable/ic_qrcode"
+                            android:tint="@color/text_secondary" />
 
-                    <Button
-                        android:id="@+id/btnTakePhoto"
-                        android:text="@string/btn_camera"
-                        android:layout_width="0dp"
-                        android:layout_height="48dp"
-                        android:layout_weight="1"
-                        android:layout_marginStart="4dp"
-                        android:enabled="false"
-                        android:textSize="14sp"
-                        android:textColor="@color/white"
-                        android:background="@drawable/btn_secondary_background"
-                        android:elevation="2dp" />
-                </LinearLayout>
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:text="@string/hint_result_empty"
+                            android:textSize="14sp"
+                            android:textColor="@color/text_secondary"
+                            android:gravity="center" />
+                    </LinearLayout>
+
+                    <!-- Result state -->
+                    <LinearLayout
+                        android:id="@+id/layoutResultContent"
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="12dp"
+                        android:visibility="gone">
+
+                        <ImageView
+                            android:id="@+id/imageView"
+                            android:layout_width="match_parent"
+                            android:layout_height="280dp"
+                            android:scaleType="fitCenter" />
+
+                        <LinearLayout
+                            android:orientation="horizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp">
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/buttonShare"
+                                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                                android:text="@string/btn_share"
+                                android:layout_width="0dp"
+                                android:layout_height="48dp"
+                                android:layout_weight="1"
+                                android:layout_marginEnd="6dp"
+                                android:textSize="14sp" />
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btnSaveGallery"
+                                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                                android:text="@string/btn_save_gallery"
+                                android:layout_width="0dp"
+                                android:layout_height="48dp"
+                                android:layout_weight="1"
+                                android:layout_marginStart="6dp"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </FrameLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Content Input -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                app:cardCornerRadius="12dp"
+                app:cardElevation="0dp"
+                app:strokeWidth="1dp"
+                app:strokeColor="@color/text_secondary"
+                app:cardBackgroundColor="@color/surface_white">
+
+                <EditText
+                    android:id="@+id/editText"
+                    android:hint="@string/hint_content_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:background="@null"
+                    android:textColor="@color/text_primary"
+                    android:textColorHint="@color/text_secondary"
+                    android:padding="16dp"
+                    android:textSize="16sp" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Customize toggle -->
+            <LinearLayout
+                android:id="@+id/rowCustomizeToggle"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="10dp"
+                android:layout_marginBottom="8dp">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/title_qr_customization"
+                    android:textAppearance="@style/TextAppearance.Generate.SectionHeader" />
 
                 <ImageView
-                    android:id="@+id/selectedImagePreview"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:layout_marginTop="12dp"
-                    android:layout_gravity="center"
-                    android:scaleType="centerCrop"
-                    android:background="@drawable/color_preview_background"
-                    android:visibility="gone" />
-
+                    android:id="@+id/ivCustomizeChevron"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_chevron_down" />
             </LinearLayout>
+
+            <!-- Customization Panel -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardCustomize"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="12dp"
+                android:visibility="gone"
+                app:cardCornerRadius="16dp"
+                app:cardElevation="2dp"
+                app:cardBackgroundColor="@color/surface_white">
+
+                <LinearLayout
+                    android:id="@+id/customizationPanel"
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="12dp">
+
+                    <!-- Color Selection -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/title_color_selection"
+                        android:textAppearance="@style/TextAppearance.Generate.SectionHeader"
+                        android:layout_marginBottom="12dp" />
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="12dp">
+
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="8dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/label_foreground_color"
+                                android:textSize="14sp"
+                                android:textColor="@color/text_primary"
+                                android:layout_marginBottom="4dp" />
+
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:layout_marginTop="4dp">
+
+                                <View
+                                    android:id="@+id/foregroundColorPreview"
+                                    android:layout_width="40dp"
+                                    android:layout_height="40dp"
+                                    android:background="@drawable/color_preview_background"
+                                    android:backgroundTint="@android:color/black" />
+
+                                <com.google.android.material.button.MaterialButton
+                                    android:id="@+id/btnPickForegroundColor"
+                                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                                    android:text="@string/btn_select"
+                                    android:layout_width="0dp"
+                                    android:layout_height="40dp"
+                                    android:layout_weight="1"
+                                    android:layout_marginStart="8dp"
+                                    android:textSize="14sp" />
+                            </LinearLayout>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:orientation="vertical"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:layout_marginStart="8dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/label_background_color"
+                                android:textSize="14sp"
+                                android:textColor="@color/text_primary"
+                                android:layout_marginBottom="4dp" />
+
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:layout_marginTop="4dp">
+
+                                <View
+                                    android:id="@+id/backgroundColorPreview"
+                                    android:layout_width="40dp"
+                                    android:layout_height="40dp"
+                                    android:background="@drawable/color_preview_background"
+                                    android:backgroundTint="@color/white" />
+
+                                <com.google.android.material.button.MaterialButton
+                                    android:id="@+id/btnPickBackgroundColor"
+                                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                                    android:text="@string/btn_select"
+                                    android:layout_width="0dp"
+                                    android:layout_height="40dp"
+                                    android:layout_weight="1"
+                                    android:layout_marginStart="8dp"
+                                    android:textSize="14sp" />
+                            </LinearLayout>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/label_border_color"
+                                android:textSize="14sp"
+                                android:textColor="@color/text_primary"
+                                android:layout_marginBottom="4dp" />
+
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:layout_width="match_parent"
+                                android:layout_height="40dp"
+                                android:layout_marginTop="4dp">
+
+                                <View
+                                    android:id="@+id/borderColorPreview"
+                                    android:layout_width="40dp"
+                                    android:layout_height="40dp"
+                                    android:background="@drawable/color_preview_background"
+                                    android:backgroundTint="@android:color/black" />
+
+                                <com.google.android.material.button.MaterialButton
+                                    android:id="@+id/btnPickBorderColor"
+                                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                                    android:text="@string/btn_select"
+                                    android:layout_width="0dp"
+                                    android:layout_height="40dp"
+                                    android:layout_weight="1"
+                                    android:layout_marginStart="8dp"
+                                    android:textSize="14sp" />
+                            </LinearLayout>
+                        </LinearLayout>
+                    </LinearLayout>
+
+                    <!-- Image Options -->
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/title_image_options"
+                        android:textAppearance="@style/TextAppearance.Generate.SectionHeader"
+                        android:layout_marginBottom="12dp" />
+
+                    <LinearLayout
+                        android:orientation="horizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <CheckBox
+                            android:id="@+id/checkAddImage"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/add_image_option"
+                            android:textColor="@color/text_primary"
+                            android:textSize="14sp"
+                            android:buttonTint="@color/primary_blue" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnSelectImage"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:text="@string/btn_gallery"
+                            android:layout_width="0dp"
+                            android:layout_height="48dp"
+                            android:layout_weight="1"
+                            android:layout_marginStart="8dp"
+                            android:enabled="false"
+                            android:textSize="14sp" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnTakePhoto"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:text="@string/btn_camera"
+                            android:layout_width="0dp"
+                            android:layout_height="48dp"
+                            android:layout_weight="1"
+                            android:layout_marginStart="4dp"
+                            android:enabled="false"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+                    <ImageView
+                        android:id="@+id/selectedImagePreview"
+                        android:layout_width="80dp"
+                        android:layout_height="80dp"
+                        android:layout_marginTop="12dp"
+                        android:layout_gravity="center"
+                        android:scaleType="centerCrop"
+                        android:background="@drawable/color_preview_background"
+                        android:visibility="gone" />
+
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Generate -->
+            <Button
+                android:id="@+id/buttonGenerate"
+                android:text="@string/btn_generate_qr"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:textColor="@color/white"
+                android:background="@drawable/btn_primary_background"
+                android:elevation="4dp" />
 
             <!-- Banner Ad -->
             <com.google.android.gms.ads.AdView
@@ -245,52 +378,7 @@
                 app:adSize="BANNER"
                 app:adUnitId="@string/TEST_ADMOB_BANNER_ID" />
 
-            <ImageView
-                android:id="@+id/imageView"
-                android:visibility="gone"
-                android:layout_width="match_parent"
-                android:layout_height="320dp"
-                android:layout_marginTop="20dp"
-                android:scaleType="fitCenter"
-                android:background="@color/surface_white"
-                android:elevation="4dp"
-                android:padding="8dp"/>
-
         </LinearLayout>
     </ScrollView>
-
-
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp">
-
-        <Button
-            android:id="@+id/buttonGenerate"
-            android:text="@string/btn_generate_qr"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginTop="16dp"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:textColor="@color/white"
-            android:background="@drawable/btn_primary_background"
-            android:elevation="4dp" />
-
-    </LinearLayout>
-
-    <Button
-        android:id="@+id/buttonShare"
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:layout_marginTop="8dp"
-        android:text="@string/btn_share"
-        android:textSize="16sp"
-        android:textColor="@color/white"
-        android:background="@drawable/btn_secondary_background"
-        android:elevation="2dp"
-        android:visibility="gone" />
-
 
 </LinearLayout>

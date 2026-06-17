@@ -28,6 +28,10 @@
     <string name="error_take_photo">Cannot load photo</string>
     <string name="qr_code_filename">qr_code_example</string>
     <string name="generate_qr_content_hint">Please enter content</string>
+    <string name="hint_result_empty">Enter content and generate to see your QR code here</string>
+    <string name="btn_save_gallery">Save to Gallery</string>
+    <string name="msg_saved_to_gallery">Saved to gallery</string>
+    <string name="error_save_gallery">Failed to save</string>
 
     <!-- Color Picker / Customization Labels -->
     <string name="pick_foreground_color">Select Foreground Color</string>
