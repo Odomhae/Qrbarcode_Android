@@ -160,10 +160,6 @@ class GenerateFragment : Fragment() {
             val messageRes = if (savedUri != null) R.string.msg_saved_to_gallery else R.string.error_save_gallery
             Toast.makeText(requireContext(), getString(messageRes), Toast.LENGTH_SHORT).show()
         }
-
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-           // findNavController().navigate(R.id.navigation_radio)
-        }
     }
 
     private fun loadSavedColors() {
