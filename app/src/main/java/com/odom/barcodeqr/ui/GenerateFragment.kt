@@ -130,6 +130,7 @@ class GenerateFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.editText.setText("")
+        binding.editText.requestFocus()
 
         adManager = AdManager(requireContext())
         loadSavedColors()

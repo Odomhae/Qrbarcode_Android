@@ -65,6 +65,8 @@
 
     <!-- MainActivity -->
     <string name="msg_back_press_to_exit">한번 더 누르면 종료됩니다</string>
+    <string name="dialog_exit_title">앱을 종료하시겠습니까?</string>
+    <string name="dialog_exit">종료</string>
 
     <!-- Additional hardcoded strings -->
     <string name="copied_to_clipboard">클립보드에 복사되었습니다</string>

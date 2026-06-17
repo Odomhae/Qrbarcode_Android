@@ -3,10 +3,13 @@ package com.odom.barcodeqr
 import android.app.Activity
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
+import android.view.ViewGroup
+import android.widget.Button
+import android.widget.FrameLayout
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.OnBackPressedDispatcher
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -17,6 +20,9 @@ import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.play.core.review.ReviewInfo
 import com.google.android.play.core.review.ReviewManagerFactory
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.AdSize
+import com.google.android.gms.ads.AdView
 import com.google.android.gms.ads.MobileAds
 import com.odom.barcodeqr.databinding.ActivityMainBinding
 import kotlinx.coroutines.flow.flow
@@ -25,7 +31,7 @@ import kotlinx.coroutines.flow.flow
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private var backPressedTime: Long = 0
+    private var exitAdView: AdView? = null
     private lateinit var reviewManager: com.google.android.play.core.review.ReviewManager
     private var reviewInfo: com.google.android.play.core.review.ReviewInfo? = null
 
@@ -58,7 +64,10 @@ class MainActivity : AppCompatActivity() {
         
         // Initialize AdMob
         MobileAds.initialize(this) {}
-        
+
+        // Pre-load the banner ad shown in the exit confirmation dialog
+        preloadExitBannerAd()
+
         // Initialize in-app review
         initializeInAppReview()
 
@@ -72,28 +81,58 @@ class MainActivity : AppCompatActivity() {
                 val navController = findNavController(R.id.nav_host_fragment_activity_main)
                 val currentFragment = navController.currentDestination?.id
                 
-                // Check if we're at top level fragments
+                // At a top-level destination: ask the user to confirm exit via a
+                // dialog that shows the pre-loaded banner ad.
                 if (currentFragment in listOf(R.id.navigation_scan, R.id.navigation_generate, R.id.navigation_history)) {
-                    if (System.currentTimeMillis() - backPressedTime < 2000) {
-                        // Second back press within 2 seconds - exit app
-                        finish()
-                    } else {
-                        // First back press - show toast and potentially show review
-                        backPressedTime = System.currentTimeMillis()
-                        Toast.makeText(this@MainActivity, getString(R.string.msg_back_press_to_exit), Toast.LENGTH_SHORT).show()
-                        
-                        // Show in-app review (random chance to show)
-                        //showInAppReview()
-                        initializeInAppReview()
-                    }
+                    showExitDialog()
                 } else {
                     // Navigate back in fragment hierarchy
                     navController.popBackStack()
                 }
             }
         }
-        
+
         onBackPressedDispatcher.addCallback(this, callback)
+    }
+
+    private fun preloadExitBannerAd() {
+        exitAdView = AdView(this).apply {
+            setAdSize(AdSize.MEDIUM_RECTANGLE)
+            adUnitId = getString(R.string.TEST_ADMOB_BANNER_ID)
+            loadAd(AdRequest.Builder().build())
+        }
+    }
+
+    private fun showExitDialog() {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_exit_confirm, null)
+        val adContainer = dialogView.findViewById<FrameLayout>(R.id.ad_container)
+
+        // Attach the pre-loaded banner ad into the dialog.
+        exitAdView?.let { ad ->
+            (ad.parent as? ViewGroup)?.removeView(ad)
+            adContainer.addView(ad)
+        }
+
+        val dialog = AlertDialog.Builder(this)
+            .setView(dialogView)
+            .setCancelable(true)
+            .create()
+
+        // Detach the ad on dismiss so it can be reused on the next back press.
+        dialog.setOnDismissListener {
+            (exitAdView?.parent as? ViewGroup)?.removeView(exitAdView)
+        }
+
+        dialogView.findViewById<Button>(R.id.btn_exit_confirm).setOnClickListener {
+            dialog.dismiss()
+            finish()
+        }
+
+        dialogView.findViewById<Button>(R.id.btn_exit_cancel).setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
     
     private fun initializeInAppReview() {
@@ -110,6 +149,21 @@ class MainActivity : AppCompatActivity() {
 
             }
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        exitAdView?.resume()
+    }
+
+    override fun onPause() {
+        exitAdView?.pause()
+        super.onPause()
+    }
+
+    override fun onDestroy() {
+        exitAdView?.destroy()
+        super.onDestroy()
     }
 
 }
